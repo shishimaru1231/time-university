@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ドラッカーから学ぶ タイムマネジメントの実践ワークショップ - 第1回</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary: #4ECDC4;
+  --primary-dark: #26A69A;
+  --accent: #FF7043;
+  --bg: #F5F5F5;
+  --text: #333333;
+  --text-light: #666666;
+  --white: #FFFFFF;
+  --dark: #1a1a2e;
+  --dark-surface: #16213e;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  color: var(--text);
+  background: var(--dark);
+}
+
+.slide-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5vh 8vw;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Slide themes */
+.slide--light {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.slide--white {
+  background: var(--white);
+  color: var(--text);
+}
+
+.slide--dark {
+  background: var(--dark);
+  color: var(--white);
+}
+
+.slide--dark-surface {
+  background: var(--dark-surface);
+  color: var(--white);
+}
+
+.slide--primary {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: var(--white);
+}
+
+.slide--accent {
+  background: linear-gradient(135deg, #e64a19, var(--accent));
+  color: var(--white);
+}
+
+.slide--gradient {
+  background: linear-gradient(135deg, var(--dark), var(--dark-surface));
+  color: var(--white);
+}
+
+/* Typography */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.5em;
+}
+
+h3 {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.5em;
+}
+
+p, li {
+  font-size: clamp(1rem, 1.8vw, 1.5rem);
+  line-height: 1.8;
+}
+
+.text-large {
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  line-height: 1.7;
+}
+
+.text-small {
+  font-size: clamp(0.85rem, 1.3vw, 1.1rem);
+  color: var(--text-light);
+}
+
+/* Big number display */
+.big-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(5rem, 15vw, 14rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.big-number--accent {
+  color: var(--accent);
+}
+
+.big-number--primary {
+  color: var(--primary);
+}
+
+.big-number--white {
+  color: var(--white);
+}
+
+.big-number-label {
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: 400;
+  margin-top: 0.5em;
+  opacity: 0.85;
+}
+
+/* Quote styling */
+.quote {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(1.4rem, 3vw, 2.5rem);
+  line-height: 1.6;
+  max-width: 800px;
+  text-align: center;
+  position: relative;
+  padding: 0 2rem;
+}
+
+.quote::before {
+  content: '\201C';
+  font-size: clamp(3rem, 6vw, 5rem);
+  position: absolute;
+  top: -0.4em;
+  left: -0.1em;
+  opacity: 0.3;
+  font-style: normal;
+}
+
+.quote-author {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-style: normal;
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  margin-top: 1.5em;
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+/* Section label */
+.section-label {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: clamp(0.75rem, 1.2vw, 1rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1.5em;
+  opacity: 0.6;
+}
+
+.section-label--primary {
+  color: var(--primary);
+  opacity: 1;
+}
+
+.section-label--accent {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* Lists */
+.content-list {
+  list-style: none;
+  text-align: left;
+  max-width: 700px;
+  width: 100%;
+}
+
+.content-list li {
+  padding: 0.6em 0;
+  padding-left: 1.5em;
+  position: relative;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+}
+
+.content-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.content-list--accent li::before {
+  background: var(--accent);
+}
+
+.content-list--white li::before {
+  background: var(--white);
+}
+
+/* Numbered list */
+.numbered-list {
+  list-style: none;
+  text-align: left;
+  max-width: 700px;
+  width: 100%;
+  counter-reset: item;
+}
+
+.numbered-list li {
+  padding: 0.8em 0;
+  padding-left: 2.5em;
+  position: relative;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  counter-increment: item;
+}
+
+.numbered-list li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8em;
+}
+
+/* Cards layout */
+.cards {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1000px;
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.card--light {
+  background: var(--white);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.card-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.3em;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  margin-bottom: 0.3em;
+}
+
+.card-desc {
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  opacity: 0.7;
+}
+
+/* Data comparison */
+.data-compare {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.data-compare__item {
+  text-align: center;
+}
+
+.data-compare__arrow {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+/* Divider */
+.divider {
+  width: 60px;
+  height: 3px;
+  background: var(--primary);
+  margin: 1.5em auto;
+  border-radius: 2px;
+}
+
+.divider--accent {
+  background: var(--accent);
+}
+
+.divider--white {
+  background: rgba(255,255,255,0.3);
+}
+
+/* Highlight box */
+.highlight-box {
+  background: rgba(78, 205, 196, 0.1);
+  border-left: 4px solid var(--primary);
+  padding: 1.5rem 2rem;
+  border-radius: 0 12px 12px 0;
+  max-width: 700px;
+  margin-top: 1.5em;
+  text-align: left;
+}
+
+.highlight-box--accent {
+  background: rgba(255, 112, 67, 0.1);
+  border-left-color: var(--accent);
+}
+
+/* Slide counter */
+.slide-counter {
+  position: fixed;
+  bottom: 2vh;
+  right: 3vw;
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  color: rgba(255,255,255,0.4);
+  z-index: 100;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.slide--light .slide-counter,
+.slide--white .slide-counter {
+  color: rgba(0,0,0,0.25);
+}
+
+/* Progress bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--primary);
+  z-index: 100;
+  transition: width 0.4s ease;
+}
+
+/* Workshop specific styles */
+.workshop-instruction {
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  font-weight: 500;
+  text-align: center;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* Quiz styles */
+.quiz-question {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+  text-align: center;
+  max-width: 750px;
+  line-height: 1.5;
+  margin-bottom: 1.5em;
+}
+
+.quiz-options {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.quiz-option {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 500;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* Subtle top accent line */
+.slide-accent-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+/* Slide content wrapper */
+.slide-content {
+  text-align: center;
+  max-width: 900px;
+  width: 100%;
+}
+
+/* vs display */
+.vs-display {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.vs-item {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.vs-label {
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  opacity: 0.6;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+}
+
+.vs-value {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+}
+
+.vs-divider {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  opacity: 0.3;
+  font-weight: 300;
+}
+
+/* Research source tag */
+.source {
+  font-size: clamp(0.7rem, 1vw, 0.85rem);
+  opacity: 0.5;
+  margin-top: 2em;
+  font-weight: 400;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .slide {
+    padding: 4vh 6vw;
+  }
+
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .quiz-options {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .vs-display {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .data-compare {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- ==================== SLIDE 1: 表紙 ==================== -->
+<div class="slide slide--gradient">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">タイムクラウド株式会社 presents</p>
+    <h1 style="margin-bottom: 0.3em;">ドラッカーから学ぶ</h1>
+    <h2 style="font-weight: 400; opacity: 0.85; margin-bottom: 1em;">タイムマネジメントの実践ワークショップ</h2>
+    <div class="divider divider--white"></div>
+    <h3 style="color: var(--primary); margin-bottom: 1.5em;">第1回: 時間を記録する</h3>
+    <p style="opacity: 0.6; font-size: clamp(0.9rem, 1.4vw, 1.1rem);">全3回シリーズ</p>
+    <p style="opacity: 0.7; margin-top: 1.5em; font-size: clamp(1rem, 1.5vw, 1.2rem);">和田慎也</p>
+    <p style="opacity: 0.45; font-size: clamp(0.8rem, 1.2vw, 0.95rem);">タイムクラウド株式会社 執行役員 / CRO</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 2: 全3回の構成 ==================== -->
+<div class="slide slide--dark-surface">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">WORKSHOP SERIES</p>
+    <h2 style="margin-bottom: 1.5em;">全3回の構成</h2>
+    <div class="cards">
+      <div class="card" style="border-color: var(--primary); border-width: 2px;">
+        <div class="card-number">01</div>
+        <div class="card-title" style="color: var(--primary);">時間を記録する</div>
+        <div class="card-desc">Today</div>
+      </div>
+      <div class="card">
+        <div class="card-number" style="opacity: 0.5;">02</div>
+        <div class="card-title">時間を整理する</div>
+        <div class="card-desc" style="opacity: 0.4;">2週間後</div>
+      </div>
+      <div class="card">
+        <div class="card-number" style="opacity: 0.5;">03</div>
+        <div class="card-title">時間をまとめる</div>
+        <div class="card-desc" style="opacity: 0.4;">4週間後</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: ドラッカー引用（オープニング） ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <div class="quote">
+      成果をあげる者は仕事からスタートしない。<br>時間からスタートする。
+      <div class="quote-author">-- P.F. ドラッカー『経営者の条件』</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: 今日のアジェンダ ==================== -->
+<div class="slide slide--light">
+  <div class="slide-content">
+    <p class="section-label">TODAY'S AGENDA</p>
+    <h2 style="margin-bottom: 1.2em;">今日の流れ</h2>
+    <ol class="numbered-list">
+      <li><strong>学術的事実</strong><br><span class="text-small">人間は時間を管理できるようにできていない</span></li>
+      <li><strong>和田の解釈</strong><br><span class="text-small">TimeCrowdの現場から見えたこと</span></li>
+      <li><strong>ワークショップ</strong><br><span class="text-small">あなたの時間感覚は正しいか？</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: 事実1 ドラッカー引用 ==================== -->
+<div class="slide slide--gradient">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">FACT 01</p>
+    <h2 style="margin-bottom: 1em;">人間の時間感覚は構造的に歪む</h2>
+    <div class="divider divider--white"></div>
+    <div class="quote" style="font-size: clamp(1.2rem, 2.2vw, 1.8rem); margin-top: 1em;">
+      人間は時間をうまく管理できるようにはできていない。<br>暗闇に閉じ込められると時間認識を完全に失う。
+      <div class="quote-author">-- P.F. ドラッカー</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: 洞窟実験 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label" style="opacity: 0.5;">Siffre (1962) 洞窟実験</p>
+    <h2 style="margin-bottom: 0.5em;">地下130mの洞窟に63日間</h2>
+    <div class="vs-display" style="margin: 1.5em 0;">
+      <div class="vs-item">
+        <div class="vs-label">本人の認識</div>
+        <div class="vs-value" style="color: var(--primary);">8月20日</div>
+      </div>
+      <div class="vs-divider">/</div>
+      <div class="vs-item">
+        <div class="vs-label">実際の日付</div>
+        <div class="vs-value" style="color: var(--accent);">9月14日</div>
+      </div>
+    </div>
+    <p class="text-large" style="color: var(--accent); font-weight: 600;">約2週間の時間を喪失</p>
+    <p class="source">Michel Siffre, 1962 - 地下洞窟隔離実験</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: 一川教授のデータ ==================== -->
+<div class="slide slide--white">
+  <div class="slide-content">
+    <div class="slide-accent-top"></div>
+    <p class="section-label">加齢と時間知覚</p>
+    <h2 style="margin-bottom: 1em;">同じ3分間が、年齢で変わる</h2>
+    <p class="text-large" style="margin-bottom: 1em;">
+      2-4歳加齢するごとに、<br>3分間の体感が<strong style="color: var(--accent);">1秒ずつ短く</strong>なる
+    </p>
+    <div class="highlight-box">
+      <p>年齢 / 感情 / 注意の状態によって、<br>同じ客観時間がまったく異なって体験される</p>
+    </div>
+    <p class="source">一川誠（千葉大学 / 日本時間学会 会長）4-82歳の被験者による実験</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: 事実1まとめ ==================== -->
+<div class="slide slide--primary">
+  <div class="slide-content">
+    <h2 style="margin-bottom: 0.8em;">人間の脳に、<br>正確な時計はない。</h2>
+    <div class="divider divider--white"></div>
+    <p class="text-large" style="opacity: 0.9; margin-top: 1em;">
+      感情・注意・年齢で時間の感じ方が変わる。<br>
+      「体感」で時間を把握するのは<br>構造的に無理がある。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 9: 事実2 ドラッカー引用 ==================== -->
+<div class="slide slide--gradient">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">FACT 02</p>
+    <h2 style="margin-bottom: 1em;">人間は所要時間を系統的に見誤る</h2>
+    <div class="divider divider--white"></div>
+    <div class="quote" style="font-size: clamp(1.2rem, 2.2vw, 1.8rem); margin-top: 1em;">
+      時間についてはほとんどの人が楽観的である。
+      <div class="quote-author">-- P.F. ドラッカー</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 10: 計画錯誤のデータ ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label" style="opacity: 0.5;">Buehler et al. (1994) 心理学専攻の学生37人・卒論完了日の予測</p>
+    <div class="vs-display" style="margin: 1em 0;">
+      <div class="vs-item">
+        <div class="vs-label">予測</div>
+        <div class="vs-value" style="color: var(--primary);">27.4<span style="font-size: 0.4em; opacity: 0.7;">日</span></div>
+      </div>
+      <div class="vs-divider">/</div>
+      <div class="vs-item">
+        <div class="vs-label">実際</div>
+        <div class="vs-value" style="color: var(--accent);">55.5<span style="font-size: 0.4em; opacity: 0.7;">日</span></div>
+      </div>
+    </div>
+    <p class="text-large" style="color: var(--accent); font-weight: 600; margin-top: 0.5em;">約2倍の乖離</p>
+    <div class="divider divider--white"></div>
+    <p style="opacity: 0.7; margin-top: 1em;">
+      能力の問題ではなく、人間の認知バイアスの問題。<br>
+      ノーベル賞経済学者 Kahneman が実証した普遍的現象。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 11: 事実3 ドラッカー引用 ==================== -->
+<div class="slide slide--gradient">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">FACT 03</p>
+    <h2 style="margin-bottom: 1em;">記憶は間違っている</h2>
+    <div class="divider divider--white"></div>
+    <div class="quote" style="font-size: clamp(1.1rem, 2vw, 1.7rem); margin-top: 1em;">
+      記憶にたよった時間の報告はあてにならない。<br>
+      時間の使い方を記録してもらい、確認してもらうと、<br>
+      自分で予測したものとの違いに驚く。
+      <div class="quote-author">-- P.F. ドラッカー</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 12: 47秒 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label" style="opacity: 0.5;">1つのタスクに集中できる平均時間</p>
+    <div class="big-number big-number--accent">47<span style="font-size: 0.35em; opacity: 0.7;">秒</span></div>
+    <p class="big-number-label" style="opacity: 0.6;">しかも自己中断が全中断の49%</p>
+    <p class="source">Gloria Mark (2023) "Attention Span"</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 13: 記憶の劣化 ==================== -->
+<div class="slide slide--white">
+  <div class="slide-content">
+    <div class="slide-accent-top"></div>
+    <p class="section-label">記憶はいつ劣化するか</p>
+    <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center; margin: 1.5em 0;">
+      <div class="highlight-box" style="max-width: 600px;">
+        <h3 style="color: var(--accent); margin-bottom: 0.3em;">1日あたり 1.3 - 1.8時間のずれ</h3>
+        <p class="text-small">医師のモバイルアプリ実測と自己報告の比較</p>
+        <p class="source" style="margin-top: 0.5em;">Guthrie et al. (2022)</p>
+      </div>
+      <div class="highlight-box highlight-box--accent" style="max-width: 600px;">
+        <h3 style="color: var(--accent); margin-bottom: 0.3em;">わずか数時間で記憶が劣化する</h3>
+        <p class="text-small">従来の想定よりはるかに早い</p>
+        <p class="source" style="margin-top: 0.5em;">te Braak et al. (2023)</p>
+      </div>
+    </div>
+    <p class="text-large" style="margin-top: 1em; font-weight: 500;">
+      だからドラッカーは<strong style="color: var(--primary-dark);">「記録せよ」</strong>と言った。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 14: 事実4 タイトル ==================== -->
+<div class="slide slide--gradient">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">FACT 04</p>
+    <h2 style="margin-bottom: 1em;">進化的ミスマッチ</h2>
+    <div class="divider divider--white"></div>
+    <p class="text-large" style="opacity: 0.85; margin-top: 1em;">
+      なぜ人間は、時間を管理できないのか。<br>
+      それは「怠惰」ではなく「脳の設計仕様」。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 15: 進化的ミスマッチ 詳細 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <div class="vs-display" style="margin-bottom: 2em;">
+      <div class="vs-item">
+        <div class="vs-label">脳が適応した環境</div>
+        <h3 style="color: var(--primary);">狩猟採集時代</h3>
+        <p style="opacity: 0.6; font-size: clamp(0.85rem, 1.3vw, 1rem);">約200万 - 1万年前</p>
+      </div>
+      <div class="vs-divider" style="font-size: 2rem;">vs</div>
+      <div class="vs-item">
+        <div class="vs-label">現在の環境</div>
+        <h3 style="color: var(--accent);">ナレッジワーク</h3>
+        <p style="opacity: 0.6; font-size: clamp(0.85rem, 1.3vw, 1rem);">分刻みのスケジュール管理</p>
+      </div>
+    </div>
+    <div class="divider divider--white"></div>
+    <ul class="content-list content-list--white" style="margin-top: 1.5em;">
+      <li>目の前の報酬を将来の報酬より過大評価する（双曲割引）</li>
+      <li>先延ばしは普遍的な自己制御の失敗（691件のメタ分析）</li>
+      <li>意志の力だけでは解決しない</li>
+    </ul>
+    <p class="source">Li, van Vugt & Colarelli (2018) / Ainslie (1975) / Steel (2007)</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 16: 仕組みが必要 ==================== -->
+<div class="slide slide--primary">
+  <div class="slide-content">
+    <h2 style="margin-bottom: 0.5em;">意志の力ではなく、</h2>
+    <h1 style="font-size: clamp(2.5rem, 5.5vw, 4.5rem);">仕組み。</h1>
+    <div class="divider divider--white" style="margin: 1em auto;"></div>
+    <p class="text-large" style="opacity: 0.9;">
+      ドラッカーが「記録せよ」と書いたのは、<br>まさにこの仕組みの提案だった。
+    </p>
+    <p class="source" style="opacity: 0.5;">Laibson (1997) コミットメント装置の理論</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 17: 和田の解釈 タイトル ==================== -->
+<div class="slide slide--dark-surface">
+  <div class="slide-content">
+    <p class="section-label section-label--accent">AGENDA 02</p>
+    <h2 style="margin-bottom: 0.5em;">和田の解釈</h2>
+    <div class="divider divider--white"></div>
+    <p class="text-large" style="opacity: 0.7; margin-top: 1em;">
+      TimeCrowdの現場から見えたこと
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 18: 問い1 ==================== -->
+<div class="slide slide--white">
+  <div class="slide-content">
+    <div class="slide-accent-top"></div>
+    <p class="section-label section-label--accent">QUESTION 01</p>
+    <h2 style="line-height: 1.5;">
+      ドラッカーの<br>
+      「記録してみるとまったく違う」を<br>
+      最も痛感した瞬間は？
+    </h2>
+    <div class="highlight-box" style="margin-top: 2em;">
+      <p style="opacity: 0.6; font-size: clamp(0.85rem, 1.2vw, 1rem);">
+        TimeCrowd導入企業の事例:<br>
+        コア業務をやっているつもりが、<br>
+        ノンコア業務に時間を取られていた
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 19: 問い2（事例） ==================== -->
+<div class="slide slide--light">
+  <div class="slide-content">
+    <p class="section-label section-label--accent">QUESTION 02</p>
+    <h2 style="margin-bottom: 1.2em;">
+      記録し始めただけで<br>変わったこと
+    </h2>
+    <div class="cards" style="max-width: 800px;">
+      <div class="card card--light" style="min-width: 320px;">
+        <div class="card-title" style="color: var(--primary-dark); margin-bottom: 0.5em;">アイケイワイ</div>
+        <p style="font-size: clamp(0.85rem, 1.2vw, 1rem); text-align: left;">営業部が月1週間分をノンコア業務に費やしていたと判明 &#8594; 専門部署を新設</p>
+      </div>
+      <div class="card card--light" style="min-width: 320px;">
+        <div class="card-title" style="color: var(--primary-dark); margin-bottom: 0.5em;">GVA法律事務所</div>
+        <p style="font-size: clamp(0.85rem, 1.2vw, 1rem); text-align: left;">弁護士がデータを見て「時間使いすぎですね」と自覚</p>
+      </div>
+      <div class="card card--light" style="min-width: 320px;">
+        <div class="card-title" style="color: var(--primary-dark); margin-bottom: 0.5em;">Flucle</div>
+        <p style="font-size: clamp(0.85rem, 1.2vw, 1rem); text-align: left;">可視化で「助け合い文化」が自発的に生まれた</p>
+      </div>
+      <div class="card card--light" style="min-width: 320px;">
+        <div class="card-title" style="color: var(--primary-dark); margin-bottom: 0.5em;">RECOMO</div>
+        <p style="font-size: clamp(0.85rem, 1.2vw, 1rem); text-align: left;">社長が「社内コミュニケーション時間が取れていない」と気づいた</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 20: 問い3 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--accent">QUESTION 03</p>
+    <h2 style="margin-bottom: 0.8em;">
+      58年経っても<br>
+      「記録」が広まらない<br>
+      最大の壁は？
+    </h2>
+    <div class="divider divider--white"></div>
+    <p class="text-large" style="opacity: 0.6; margin-top: 1em;">
+      個人の問題か？ 組織の問題か？
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 21: 問い4 ==================== -->
+<div class="slide slide--dark-surface">
+  <div class="slide-content">
+    <p class="section-label section-label--accent">QUESTION 04</p>
+    <h2 style="margin-bottom: 0.8em;">
+      ドラッカー <span style="font-family: 'Playfair Display', serif; font-weight: 400; opacity: 0.5;">x</span> AI
+    </h2>
+    <div class="divider divider--white"></div>
+    <div class="quote" style="font-size: clamp(1.1rem, 1.8vw, 1.5rem); margin-top: 1em;">
+      他の人でもやれることはないか
+      <div class="quote-author">-- P.F. ドラッカー 『経営者の条件』第2章の問い(b)</div>
+    </div>
+    <p class="text-large" style="opacity: 0.6; margin-top: 1.5em;">
+      「他の人」がAIに拡張された時代。<br>
+      時間データがAIエージェントの精度を決める。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 22: ワークショップ導入 ==================== -->
+<div class="slide slide--primary">
+  <div class="slide-content">
+    <p class="section-label" style="opacity: 0.7;">AGENDA 03</p>
+    <h1 style="margin-bottom: 0.3em;">ワークショップ</h1>
+    <div class="divider divider--white"></div>
+    <h3 style="font-weight: 400; opacity: 0.9; margin-top: 0.5em;">あなたの時間感覚は正しいか？</h3>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 23: ワーク1 指示 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">WORK 01</p>
+    <h2 style="margin-bottom: 1.5em;">1分間チャレンジ</h2>
+    <p class="workshop-instruction" style="opacity: 0.9;">
+      目を閉じてください。
+    </p>
+    <p class="text-large" style="opacity: 0.6; margin-top: 1.5em;">
+      「スタート」の合図で、<br>
+      自分の中で「1分経った」と思ったら<br>
+      手を挙げてください。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 24: ワーク1 解説 ==================== -->
+<div class="slide slide--dark-surface">
+  <div class="slide-content">
+    <h3 style="margin-bottom: 1em; opacity: 0.7;">Siffreは「2分で120を数えて」と言われて 5分かかった</h3>
+    <div class="divider divider--white"></div>
+    <p class="text-large" style="margin-top: 1em;">
+      今のずれ <span style="opacity: 0.5;">x</span> 8時間 <span style="opacity: 0.5;">x</span> 週5日 <span style="opacity: 0.5;">x</span> 年50週
+    </p>
+    <p class="text-large" style="color: var(--accent); font-weight: 600; margin-top: 0.8em;">
+      これだけの誤差が積み重なっています。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 25: ワーク2 指示 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">WORK 02</p>
+    <h2 style="margin-bottom: 1em;">昨日の時間、思い出せますか？</h2>
+    <div class="divider divider--white"></div>
+    <p class="workshop-instruction" style="margin-top: 1em; opacity: 0.9;">
+      昨日の業務時間を、<br>30分単位で書き出してください。
+    </p>
+    <p style="opacity: 0.4; margin-top: 1.5em; font-size: clamp(0.85rem, 1.3vw, 1rem);">
+      3分間 / 紙でもチャットでもOK
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 26: ワーク2 答え合わせ ==================== -->
+<div class="slide slide--white">
+  <div class="slide-content">
+    <div class="slide-accent-top"></div>
+    <h2 style="margin-bottom: 1em;">答え合わせ</h2>
+    <p class="text-large" style="margin-bottom: 1.5em;">
+      空白が3つ以上あった方、<br>
+      <strong style="color: var(--accent);">正直に手を挙げてください。</strong>
+    </p>
+    <div class="divider"></div>
+    <div class="highlight-box" style="margin-top: 1.5em;">
+      <p>空白 = ドラッカーの言う「記憶にたよった報告はあてにならない」の証拠</p>
+    </div>
+    <p style="opacity: 0.5; margin-top: 1.5em; font-size: clamp(0.85rem, 1.3vw, 1rem);">
+      カレンダーに載っていない時間<br>（移動、雑談、Slack確認、気分転換）がごっそり抜ける
+    </p>
+    <p class="source">te Braak et al. (2023): 数時間前のことですら正確に思い出せない</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 27: ワーク3 導入 ==================== -->
+<div class="slide slide--gradient">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">WORK 03</p>
+    <h2 style="margin-bottom: 0.5em;">予測 vs 現実クイズ</h2>
+    <p class="text-large" style="opacity: 0.7;">5問</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 28: Q1 質問 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">Q1 / 5</p>
+    <p class="quiz-question">あなたの先週の<br>コア業務比率は？</p>
+    <div class="quiz-options">
+      <div class="quiz-option">20%</div>
+      <div class="quiz-option">40%</div>
+      <div class="quiz-option">60%</div>
+      <div class="quiz-option">80%</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 29: Q1 回答 ==================== -->
+<div class="slide slide--white">
+  <div class="slide-content">
+    <div class="slide-accent-top"></div>
+    <p class="section-label section-label--accent">Q1 ANSWER</p>
+    <h2 style="margin-bottom: 1em;">コア業務だと思っていた</h2>
+    <div class="highlight-box highlight-box--accent">
+      <h3 style="color: var(--accent); margin-bottom: 0.3em;">アイケイワイの事例</h3>
+      <p>営業部が月1週間分をノンコア業務に<br>費やしていたことが、記録で判明。</p>
+    </div>
+    <p class="text-large" style="margin-top: 1.5em; font-weight: 500;">
+      記録する前と後で、<br>見える景色がまったく違う。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 30: Q2 質問 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">Q2 / 5</p>
+    <p class="quiz-question">先週の会議時間は<br>1日平均何時間？</p>
+    <div class="quiz-options">
+      <div class="quiz-option">1h</div>
+      <div class="quiz-option">2h</div>
+      <div class="quiz-option">3h</div>
+      <div class="quiz-option">4h以上</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 31: Q2 回答 ==================== -->
+<div class="slide slide--dark-surface">
+  <div class="slide-content">
+    <p class="section-label section-label--accent">Q2 ANSWER</p>
+    <h2 style="margin-bottom: 0.5em;">会議の<span style="color: var(--accent);">60%</span>がアドホック</h2>
+    <div class="divider divider--white"></div>
+    <p class="text-large" style="opacity: 0.7; margin-top: 1em;">
+      カレンダーに入っている会議だけが<br>
+      会議ではない。
+    </p>
+    <p class="source">Microsoft (2024)</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 32: Q3 質問 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">Q3 / 5</p>
+    <p class="quiz-question">1日に何回<br>Slackを開いていると思いますか？</p>
+    <div class="quiz-options">
+      <div class="quiz-option">10回</div>
+      <div class="quiz-option">30回</div>
+      <div class="quiz-option">50回</div>
+      <div class="quiz-option">100回以上</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 33: Q3 回答 ==================== -->
+<div class="slide slide--dark-surface">
+  <div class="slide-content">
+    <p class="section-label section-label--accent">Q3 ANSWER</p>
+    <h2 style="margin-bottom: 0.8em;">あなたが思っているより<br>はるかに多い</h2>
+    <div class="divider divider--white"></div>
+    <p class="text-large" style="opacity: 0.7; margin-top: 1em;">
+      私たちは「ちょっと確認するだけ」の回数を<br>
+      驚くほど過小評価している。
+    </p>
+    <p style="opacity: 0.5; margin-top: 1.5em; font-size: clamp(0.85rem, 1.3vw, 1rem);">
+      Gloria Mark: 自己中断が全中断の49%
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 34: Q4 質問 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">Q4 / 5</p>
+    <p class="quiz-question">1つのタスクに集中できる<br>平均時間は？</p>
+    <div class="quiz-options">
+      <div class="quiz-option">5分</div>
+      <div class="quiz-option">15分</div>
+      <div class="quiz-option">30分</div>
+      <div class="quiz-option">60分以上</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 35: Q4 回答（47秒ドカン） ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--accent" style="margin-bottom: 0.5em;">Q4 ANSWER</p>
+    <div class="big-number big-number--accent">47<span style="font-size: 0.35em; opacity: 0.7;">秒</span></div>
+    <p class="big-number-label" style="opacity: 0.6; margin-top: 0.3em;">分ではなく、秒。</p>
+    <p class="source">Gloria Mark (2023) "Attention Span"</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 36: Q5 質問 ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">Q5 / 5</p>
+    <p class="quiz-question">「このタスク1時間で終わる」<br>と思った時、実際は？</p>
+    <div class="quiz-options">
+      <div class="quiz-option">1h</div>
+      <div class="quiz-option">1.5h</div>
+      <div class="quiz-option">2h</div>
+      <div class="quiz-option">3h以上</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 37: Q5 回答 ==================== -->
+<div class="slide slide--dark-surface">
+  <div class="slide-content">
+    <p class="section-label section-label--accent">Q5 ANSWER</p>
+    <div class="vs-display" style="margin: 1em 0;">
+      <div class="vs-item">
+        <div class="vs-label">予測</div>
+        <div class="vs-value" style="color: var(--primary);">27<span style="font-size: 0.4em; opacity: 0.7;">日</span></div>
+      </div>
+      <div class="vs-divider">/</div>
+      <div class="vs-item">
+        <div class="vs-label">実際</div>
+        <div class="vs-value" style="color: var(--accent);">55<span style="font-size: 0.4em; opacity: 0.7;">日</span></div>
+      </div>
+    </div>
+    <h3 style="color: var(--accent); margin: 0.5em 0;">約2倍</h3>
+    <div class="divider divider--white"></div>
+    <p style="opacity: 0.7; margin-top: 1em;">
+      ノーベル賞経済学者の Kahneman が証明した通り、<br>
+      人間は全員この問題を間違えます。
+    </p>
+    <p class="source">Buehler et al. (1994) / Kahneman & Tversky (1979)</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 38: ワーク4 宣言タイム ==================== -->
+<div class="slide slide--primary">
+  <div class="slide-content">
+    <p class="section-label" style="opacity: 0.7;">WORK 04</p>
+    <h2 style="margin-bottom: 1em;">宣言タイム</h2>
+    <div class="divider divider--white"></div>
+    <p class="workshop-instruction" style="margin-top: 1em;">
+      チャットに書いてください:
+    </p>
+    <div style="background: rgba(255,255,255,0.15); border-radius: 12px; padding: 1.5rem 2.5rem; margin-top: 1.5em; max-width: 600px;">
+      <p class="text-large" style="font-weight: 500;">
+        「私は明日から<br>
+        <span style="border-bottom: 2px solid rgba(255,255,255,0.5); padding-bottom: 2px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+        で時間を記録します」
+      </p>
+    </div>
+    <p style="opacity: 0.6; margin-top: 1.5em; font-size: clamp(0.85rem, 1.3vw, 1rem);">
+      方法は自由。ドラッカーの時代は紙と鉛筆だった。
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 39: 宿題 ==================== -->
+<div class="slide slide--white">
+  <div class="slide-content">
+    <div class="slide-accent-top"></div>
+    <p class="section-label">HOMEWORK</p>
+    <h2 style="margin-bottom: 1.2em;">次回までの記録ルール</h2>
+    <ol class="numbered-list">
+      <li><strong>リアルタイムで記録する</strong><br><span class="text-small">後から思い出して書かない（数時間で劣化する）</span></li>
+      <li><strong>最低2週間</strong><br><span class="text-small">1日や2日では傾向が見えない</span></li>
+      <li><strong>カテゴリは最低4つ</strong><br><span class="text-small">コア業務 / 会議 / 管理業務 / その他</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 40: 次回予告 ==================== -->
+<div class="slide slide--gradient">
+  <div class="slide-content">
+    <p class="section-label section-label--primary">NEXT TIME</p>
+    <h2 style="margin-bottom: 0.5em;">第2回: 時間を整理する</h2>
+    <div class="divider divider--white"></div>
+    <p class="text-large" style="opacity: 0.8; margin: 1em 0;">
+      2週間後、記録したデータを持ち寄ります。<br>
+      今日の「予測 vs 現実」の答えが、<br>
+      自分のデータで出ます。
+    </p>
+    <div class="quote" style="font-size: clamp(1.1rem, 1.8vw, 1.5rem); margin-top: 1.5em;">
+      会議は組織の欠陥を補完するものである。<br>
+      理想的な組織とは会議のない組織である。
+      <div class="quote-author">-- P.F. ドラッカー</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 41: クロージング ==================== -->
+<div class="slide slide--dark">
+  <div class="slide-content">
+    <div class="quote" style="font-size: clamp(1.8rem, 4vw, 3.2rem);">
+      記憶ではなく記録で。
+      <div class="quote-author" style="font-size: clamp(1rem, 1.5vw, 1.2rem);">-- P.F. ドラッカー</div>
+    </div>
+    <div class="divider" style="margin: 2em auto;"></div>
+    <p style="opacity: 0.5; font-size: clamp(0.85rem, 1.3vw, 1rem);">timecrowd.net</p>
+  </div>
+</div>
+
+</div><!-- /slide-container -->
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('slideCounter');
+  const progressBar = document.getElementById('progressBar');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(index) {
+    if (index < 0 || index >= total) return;
+    slides[current].classList.remove('active');
+    current = index;
+    slides[current].classList.add('active');
+    updateCounter();
+    updateProgress();
+    updateCounterColor();
+  }
+
+  function updateCounter() {
+    counter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function updateProgress() {
+    const pct = ((current + 1) / total) * 100;
+    progressBar.style.width = pct + '%';
+  }
+
+  function updateCounterColor() {
+    const slide = slides[current];
+    if (slide.classList.contains('slide--light') || slide.classList.contains('slide--white')) {
+      counter.style.color = 'rgba(0,0,0,0.25)';
+    } else {
+      counter.style.color = 'rgba(255,255,255,0.4)';
+    }
+  }
+
+  function nextSlide() {
+    showSlide(current + 1);
+  }
+
+  function prevSlide() {
+    showSlide(current - 1);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    switch(e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case ' ':
+      case 'PageDown':
+        e.preventDefault();
+        nextSlide();
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault();
+        prevSlide();
+        break;
+      case 'Home':
+        e.preventDefault();
+        showSlide(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        showSlide(total - 1);
+        break;
+    }
+  });
+
+  // Touch navigation
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) nextSlide();
+      else prevSlide();
+    }
+  }, { passive: true });
+
+  // Click navigation (left third = prev, right two-thirds = next)
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A') return;
+    const x = e.clientX / window.innerWidth;
+    if (x < 0.33) prevSlide();
+    else nextSlide();
+  });
+
+  // Initialize
+  showSlide(0);
+})();
+</script>
+
+</body>
+</html>
