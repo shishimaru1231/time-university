@@ -1,0 +1,288 @@
+# Time University 構想
+
+TimeCrowdの事業導線として設計するカリキュラム体系
+
+---
+
+## Concept
+
+**「時間」を学問として体系化する、日本初のビジネス教育プログラム**
+
+TimeCrowdは「時間を計測するツール」を提供している。しかし、なぜ時間を計測すべきなのか、計測したデータをどう読み解くか、そもそも「時間」とは何かを体系的に教える場所がない。
+
+Time Universityは、その「なぜ」を教育コンテンツとして提供し、理解した人が自然とTimeCrowdに辿り着く導線を設計する。
+
+### Positioning
+
+```
+    [Philosophy of Time]
+           |
+    [Science of Time]
+           |
+    [Practice of Time] ← TimeCrowdはここに位置する
+           |
+    [Time Data & Analytics]
+           |
+    [Time × AI]
+```
+
+TimeCrowdを「売る」のではなく、「時間」という概念を深く理解した人がTimeCrowdの価値に気づく構造を作る。
+
+### Intellectual Lineage（思想の系譜）
+
+```
+Drucker (1966) 「時間を記録→整理→まとめる」「知識労働者」
+  |
+  +--→ David Allen / GTD (2001) 捕捉→整理→実行
+  +--→ Cal Newport / Deep Work (2016) 深い集中のためのブロック確保
+  +--→ Cal Newport / Slow Productivity (2024) やることを減らす
+  |
+  +--→ TimeCrowd = ドラッカーの提言のデジタル実装
+  +--→ Time University = ドラッカーの思想を体系的に教育する場
+```
+
+ドラッカーは1966年に「記憶ではなく記録で、リアルタイムで4-6週間記録せよ」と書いた。58年間、この提言はアナログでしか実践できなかった。TimeCrowdはそのデジタル実装であり、Time Universityはその思想の体系的教育である。
+
+---
+
+## Business Logic
+
+### TimeCrowdが解決する課題の再定義
+
+従来: 「工数管理ツール」「プロジェクトの時間を可視化」
+Time University経由: 「時間設計のインフラ」「思考時間を守るためのデータ基盤」
+
+### Funnel Design
+
+```
+[Awareness] Time Universityの無料コンテンツ（記事・動画・Podcast）
+  |
+[Interest] Open Lecture / Workshopへの参加
+  |
+[Understanding] 「計測なき改善なし」の体感（Module 4の学び）
+  |
+[Trial] TimeCrowdの無料トライアル
+  |
+[Adoption] 時間データに基づく意思決定の習慣化
+  |
+[Expansion] 組織導入・チーム展開
+```
+
+**核心**: Module 4「計測なき改善なし」が転換点。ここで「時間を計測する」必要性を学術的に理解した聴衆が、その実践手段としてTimeCrowdに出会う。セールスではなく教育の帰結としてプロダクトが位置づけられる。
+
+---
+
+## Curriculum Architecture
+
+### 5 Schools
+
+| School | Theme | TC事業との接点 |
+|--------|-------|----------------|
+| School 1: Philosophy | 時間の有限性、時間の価値、時間倫理 | 「なぜ時間を大切にすべきか」のマインドセット形成 |
+| School 2: Science | 注意・集中・認知科学・神経科学 | 「なぜ中断が危険か」の科学的根拠 → 中断の可視化ニーズ |
+| School 3: Management | 組織設計・制度設計・マネジメント | 組織の時間問題 → チーム単位での計測ニーズ |
+| School 4: Engineering | 計測・データ・分析・改善サイクル | **TimeCrowdの直接の守備範囲** |
+| School 5: Future Studies | AI×時間・リモートワーク・時間の再配分 | TimeCrowd AI、次世代プロダクトへの接続 |
+
+### Course Catalog
+
+---
+
+#### School 1: Philosophy of Time
+
+**目的**: 「時間を大切にすべき理由」を知的に理解する
+
+| Course | 内容 | Key Sources |
+|--------|------|-------------|
+| **PHI-100. Know Thy Time** | **ドラッカーの時間管理3ステップ: 記録→整理→まとめる。Time University全体のOrigin Story** | **Drucker (1966) 'The Effective Executive'** |
+| PHI-101. The 4,000 Weeks | 人生の時間的制約を直視する | Burkeman (2021) |
+| PHI-102. Time Poverty | 「忙しい」の正体を科学的に分解する | Miura (2025), Whillans, Zhu (2018) |
+| PHI-103. Japan and Time | 時計の普及が変えた労働観 | 織田一朗『日本人はいつから〈せっかち〉になったか』 |
+| PHI-104. The Productivity Paradox | 長く働いても成果は増えない | Pencavel (2015), 黒田 (2017) |
+
+**Origin Story**: 1966年、ドラッカーは書いた。「成果をあげる者は仕事からスタートしない。時間からスタートする」「記憶ではなく記録で」。58年後、TimeCrowdはその提言をテクノロジーで実現した。Time Universityは、その思想を体系的に教育する場である。
+
+**Business Hook**: 「時間は有限で貴重」→「では、自分の時間をどう使っているか知っていますか？」
+
+---
+
+#### School 2: Science of Time
+
+**目的**: 注意と集中のメカニズムを理解し、「時間の質」を設計する
+
+| Course | 内容 | Key Sources |
+|--------|------|-------------|
+| SCI-201. Attention Residue | タスク切替の隠れたコスト | Leroy (2009), Leroy & Glomb (2018) |
+| SCI-202. The 47-Second Truth | 現代の注意持続時間とその原因 | Gloria Mark (2023), 通知の認知コスト研究 |
+| SCI-203. Neuroscience of Flow | 脳が最も機能する条件 | Alameda (2022), Rosen (2024), Lu (2025) |
+| SCI-204. Work Engagement | 「没頭」と「消耗」の違い | 島津明人の研究群 |
+| SCI-205. Chronotype & Rhythm | 「いつ」が「何を」と同じくらい重要 | クロノタイプ系統的レビュー (2025) |
+
+**Business Hook**: 「中断が注意を47秒に分断している」→「自分の中断パターンを可視化したくないですか？」
+
+---
+
+#### School 3: Time Management
+
+**目的**: 個人の時間管理から組織の時間設計へスケールする
+
+| Course | 内容 | Key Sources |
+|--------|------|-------------|
+| MGT-301. Meta-Analysis of Time Management | 158研究が示す「本当に効くもの」 | Aeon et al. (2021) |
+| MGT-302. GTD / Pomodoro / Slow Productivity | 3大フレームワーク比較 | Allen, Biwer (2023), Newport (2024) |
+| MGT-303. The 4-Day Week Evidence | 制度設計による構造改革 | Schor (2023/2024), 日本MS (2019) |
+| MGT-304. Hybrid Work Science | リモート×出社の最適解 | Bloom (2024) Nature |
+| MGT-305. Team Time Design | 個人最適と組織最適の接続 | Shangguan (2025), Kotynkova (2025) |
+| MGT-306. People Analytics & Time | 人事データとしての時間データ | 大湾秀雄の研究群 |
+
+**Business Hook**: 「チームの時間配分を最適化する」→「そのためにはチーム全体の時間データが必要」→ TimeCrowdのチーム機能
+
+---
+
+#### School 4: Time Engineering -- TimeCrowdの直接領域
+
+**目的**: 時間を計測し、データに基づいて改善するスキルを身につける
+
+| Course | 内容 | Key Sources |
+|--------|------|-------------|
+| ENG-401. No Measurement, No Improvement | 主観と客観の乖離を体感する | J-STAGE (2026), Mark (2023) |
+| ENG-402. Time Data Literacy | 時間データの読み方・使い方 | TimeCrowd実務事例、Microsoft NFW (2024) |
+| ENG-403. Time Visualization | ダッシュボード設計と意思決定 | TimeCrowdの分析機能 |
+| ENG-404. The Improvement Cycle | 計測→分析→再配分→再計測 | TimeCrowd導入企業のケーススタディ |
+| ENG-405. Organizational Time Audit | チーム・部門レベルの時間構造分析 | Shangguan (2025), 大湾 |
+
+**Business Hook**: このSchool自体がTimeCrowdの使い方教育。受講者は講座中にTimeCrowdを使って自分の時間を計測する。
+
+---
+
+#### School 5: Future of Time
+
+**目的**: AI時代に「時間を設計する」とはどういうことかを考える
+
+| Course | 内容 | Key Sources |
+|--------|------|-------------|
+| FUT-501. AI Productivity Evidence | 時間圧縮の定量データ | Noy (2023), Dell'Acqua (2023), Brynjolfsson (2025) |
+| FUT-502. The Jagged Frontier | AIが得意/不得意な領域の見極め | Dell'Acqua (2023) |
+| FUT-503. The Critical Thinking Crisis | AIへの依存が奪うもの | Lee (2025), HBR (2025) |
+| FUT-504. The Work Expansion Paradox | 浮いた時間はどこへ消えるか | HBR (2025), Burkeman (2021) |
+| FUT-505. Designing Time Reallocation | 「節約」ではなく「設計」 | 全講座の統合 |
+
+**Business Hook**: 「AIで浮いた時間を何に使うか、データで追跡する」→ TimeCrowd AIの価値提案
+
+---
+
+## Business Model -- 3 Layers
+
+```
+Layer 1: Free Content（認知・集客）
+  +-- note記事シリーズ「Time University」
+  +-- Audio Overview（NotebookLM生成Podcast）
+  +-- X / LinkedIn発信
+  +-- YouTube（講義の一部公開）
+
+Layer 2: Paid Programs（エンゲージメント・リード獲得）
+  +-- Open Lecture: 5回連続セミナー（既存カリキュラム）
+  +-- Corporate Training: カスタマイズ版（TimeCrowd導入込み）
+  +-- University Partnership: 単位認定プログラム
+
+Layer 3: TimeCrowd Product（コンバージョン・収益）
+  +-- Free Trial（講座受講者限定の延長プラン等）
+  +-- Team Deployment
+  +-- TimeCrowd AI
+```
+
+### KPI per Layer
+
+| Layer | 目的 | KPI | 事業接続 |
+|-------|------|-----|----------|
+| Layer 1: Free Content | 「時間を科学する」認知を広げる | PV、フォロワー、指名検索 | Brand |
+| Layer 2: Paid Programs | 「計測の必要性」を体感してもらう | 参加者数、NPS、リード数 | Pipeline |
+| Layer 3: Product | 実際に時間を計測・改善してもらう | トライアル→有料転換率 | Revenue |
+
+---
+
+## Academic Partnership
+
+産学連携はTime Universityの信頼性と独自性を担保するエンジン。
+
+### Partnership Map
+
+| School | Partner | 連携形態 |
+|--------|---------|----------|
+| School 1 | 一川誠（千葉大/時間学会長） | Academic Advisor + Guest Lecturer |
+| School 1 | 山口大学時間学研究所 | Institutional Partnership |
+| School 2 | 河原純一郎（北大） | Guest Lecturer（認知科学） |
+| School 2 | 島津明人（慶應） | Joint Research（エンゲイジメント×時間データ） |
+| School 3 | 大湾秀雄（早稲田） | Joint Research（People Analytics×時間データ） |
+| School 3 | 鶴光太郎（慶應/RIETI） | Guest Lecturer（制度設計） |
+| School 4 | TimeCrowd | **Core Domain** |
+| School 5 | 森川正之（一橋/RIETI） | Guest Lecturer（AI×生産性） |
+| School 1 | 井坂康志（ものつくり大学/ドラッカー学会共同代表） | Guest Lecturer + Origin Story監修 |
+| School 1 | 佐藤等（ドラッカー学会共同代表） | Workshop共同開催（実践ドラッカー） |
+| All | ドラッカー学会 | Conference / Joint Events |
+| All | 日本時間学会 | Conference / Joint Papers |
+
+### Value to TimeCrowd
+
+1. **Academic Credibility**: 「時間を計測すべき」が営業トークではなく学術的結論になる
+2. **Research Data**: TimeCrowdの匿名化データを使った論文が、プロダクトの科学的根拠になる
+3. **Media Exposure**: 大学との共同研究・学会発表がPR素材になる
+4. **Enterprise Pipeline**: 大学名がついた研修プログラムは、大企業の稟議を通りやすい
+
+---
+
+## Competitive Advantage
+
+「時間」をテーマにした教育コンテンツは存在するが、以下の組み合わせは他にない。
+
+| | Time University | 一般的な時間管理セミナー |
+|--|-----------------|--------------------------|
+| Academic Foundation | 31件以上の論文 + 産学連携 | 書籍ベース |
+| Data | TimeCrowdの実データ | なし |
+| System | 5 Schools / 25 Courses | 単発 or 数回 |
+| Practice Tool | TimeCrowd（計測→改善） | ノートやスプレッドシート |
+| Cutting Edge | AI×時間の実証研究 | 従来手法が中心 |
+| Authority | 日本時間学会・大学連携 | 講師個人の知名度 |
+
+**In one line**: 「時間管理のノウハウ」ではなく「時間の学問」を提供する。そしてその学問の実践基盤がTimeCrowdである。
+
+---
+
+## Roadmap
+
+### Phase 0: Seed（今〜Q2 2026）
+- [ ] 既存の5回連続講義を完成させる（カリキュラム・スライド・素材）
+- [ ] note記事シリーズ「Time University」を開始（Layer 1）
+- [ ] 一川誠教授 / 伊達洋駆氏にFirst Contact
+- [ ] NotebookLMでAudio Overviewを生成（Podcast Content）
+
+### Phase 1: Build（Q3 2026）
+- [ ] 第1回Open Lectureを開催（5回連続セミナー）
+- [ ] 山口大学時間学研究所へInstitutional Partnership打診
+- [ ] TimeCrowdデータを使った初のJoint Researchテーマ設定
+- [ ] Corporate Training版カリキュラムのPilot実施
+
+### Phase 2: Scale（Q4 2026〜）
+- [ ] University Partnership正式開設
+- [ ] 日本時間学会でのJoint Presentation
+- [ ] Time UniversityブランドのEstablish（Webサイト、Certification）
+- [ ] Corporate Training → TimeCrowd導入のPipeline確立
+
+---
+
+## Market Position Shift
+
+Time Universityの最大の効果は、TimeCrowdの市場ポジションを変えることにある。
+
+**Before**: 工数管理ツール（コスト管理・プロジェクト管理の一機能）
+**After**: 時間設計のインフラ（経営・組織・個人の意思決定基盤）
+
+「工数管理」は管理部門の予算で導入される。「時間設計のインフラ」は経営判断で導入される。予算の出どころが変わるということは、決裁者が変わるということであり、単価と市場規模が変わるということでもある。
+
+---
+
+## Next Actions
+
+1. 既存の5回連続講義を「Time University Open Lecture Season 1」として完成させる
+2. note記事のシリーズ構成を設計する（Layer 1 Content Plan）
+3. 一川誠教授へのApproach Mailを下書きする

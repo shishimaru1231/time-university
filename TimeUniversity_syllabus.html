@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time University -- Course Catalog 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary: #4ECDC4;
+    --primary-dark: #26A69A;
+    --accent: #FF7043;
+    --bg: #F5F5F5;
+    --text: #333333;
+    --white: #FFFFFF;
+    --gray-100: #F8F9FA;
+    --gray-200: #E9ECEF;
+    --gray-300: #DEE2E6;
+    --gray-500: #6C757D;
+    --gray-700: #495057;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    color: var(--white);
+    padding: 80px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(78,205,196,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 50%, rgba(255,112,67,0.06) 0%, transparent 50%);
+    animation: drift 20s ease-in-out infinite;
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-2%, 1%); }
+  }
+  .cover-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+  .cover-label {
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .cover-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+  }
+  .cover-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+  }
+  .cover-meta span { margin: 0 12px; }
+
+  /* ── Container ── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin: 48px 0;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--gray-200);
+  }
+  .section-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    background: var(--primary-dark);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    font-weight: 600;
+  }
+
+  /* ── Lineage ── */
+  .lineage {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    margin-bottom: 48px;
+  }
+  .lineage h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .lineage-sub {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 24px;
+  }
+  .lineage-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding: 8px 0;
+  }
+  .lineage-node {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    position: relative;
+    padding: 0 8px;
+  }
+  .lineage-node::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    right: -1px;
+    width: 2px;
+    height: 0;
+    border-right: 2px dashed var(--gray-300);
+    height: calc(100% - 48px);
+    display: none;
+  }
+  .lineage-year {
+    font-size: 11px;
+    color: var(--primary-dark);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .lineage-name {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .lineage-desc {
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.5;
+  }
+  .lineage-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--gray-300);
+    font-size: 20px;
+    flex-shrink: 0;
+    padding: 0 4px;
+  }
+
+  /* ── School Card ── */
+  .school {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    margin-bottom: 32px;
+  }
+  .school-header {
+    padding: 32px 40px 24px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .school-code {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .school-1 .school-code { color: #5C6BC0; }
+  .school-2 .school-code { color: #26A69A; }
+  .school-3 .school-code { color: #FF7043; }
+  .school-4 .school-code { color: #4ECDC4; }
+  .school-5 .school-code { color: #7E57C2; }
+  .school-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .school-objective {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.6;
+  }
+  .school-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .school-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .school-meta-label { font-weight: 600; color: var(--gray-700); }
+
+  /* ── Course Table ── */
+  .course-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .course-table tr {
+    border-bottom: 1px solid var(--gray-100);
+    transition: background 0.15s;
+  }
+  .course-table tr:hover { background: var(--gray-100); }
+  .course-table tr:last-child { border-bottom: none; }
+  .course-table td {
+    padding: 16px 24px;
+    vertical-align: top;
+    font-size: 14px;
+  }
+  .course-table td:first-child { padding-left: 40px; }
+  .course-table td:last-child { padding-right: 40px; }
+  .course-id {
+    font-family: 'Inter', monospace;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--gray-700);
+    white-space: nowrap;
+    width: 100px;
+  }
+  .course-title {
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .course-desc {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.5;
+  }
+  .course-ref {
+    font-size: 12px;
+    color: var(--gray-500);
+    text-align: right;
+    white-space: nowrap;
+    font-style: italic;
+  }
+  .course-featured { background: rgba(78,205,196,0.04); }
+  .course-featured .course-id { color: var(--primary-dark); }
+
+  /* ── Faculty ── */
+  .faculty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .faculty-card {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .faculty-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+  .faculty-affiliation {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+  }
+  .faculty-role {
+    font-size: 12px;
+    color: var(--primary-dark);
+    font-weight: 500;
+  }
+
+  /* ── Quote ── */
+  .quote-block {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: var(--white);
+    padding: 48px 40px;
+    border-radius: 12px;
+    margin: 48px 0;
+    position: relative;
+  }
+  .quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    color: rgba(78,205,196,0.3);
+    position: absolute;
+    top: 8px;
+    left: 24px;
+    line-height: 1;
+  }
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+  }
+  .quote-author {
+    margin-top: 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Reading List ── */
+  .reading-list {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 32px 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .reading-list h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .reading-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .reading-item:last-child { border-bottom: none; }
+  .reading-author { font-weight: 600; }
+  .reading-title { font-style: italic; }
+  .reading-pub { color: var(--gray-500); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 48px 24px;
+    font-size: 12px;
+    color: var(--gray-500);
+    border-top: 1px solid var(--gray-200);
+    margin-top: 64px;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .cover { padding: 48px 24px; }
+    .cover h1 { font-size: 36px; }
+    .school-header { padding: 24px; }
+    .course-table td { padding: 12px 16px; }
+    .course-table td:first-child { padding-left: 16px; }
+    .lineage-flow { flex-direction: column; align-items: center; }
+    .lineage-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── Cover ─── -->
+<header class="cover">
+  <div class="cover-content">
+    <div class="cover-label">Course Catalog 2026-2027</div>
+    <h1>Time University</h1>
+    <div class="cover-subtitle">The Science, Practice, and Philosophy of Time</div>
+    <div class="cover-meta">
+      <span>5 Schools</span>
+      <span>|</span>
+      <span>26 Courses</span>
+      <span>|</span>
+      <span>31+ Academic Sources</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ─── Drucker Quote ─── -->
+  <div class="quote-block">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">
+      Effective executives do not start with their tasks.<br>
+      They start with their time.
+    </div>
+    <div class="quote-author">-- Peter F. Drucker, <em>The Effective Executive</em> (1966)</div>
+  </div>
+
+  <!-- ─── Intellectual Lineage ─── -->
+  <div class="lineage">
+    <h2>Intellectual Lineage</h2>
+    <div class="lineage-sub">ドラッカーからTimeCrowdへ -- 58年の思想の系譜</div>
+    <div class="lineage-flow">
+      <div class="lineage-node">
+        <div class="lineage-year">1966</div>
+        <div class="lineage-name">Drucker</div>
+        <div class="lineage-desc">時間を記録せよ<br>知識労働者</div>
+      </div>
+      <div class="lineage-arrow">&#8594;</div>
+      <div class="lineage-node">
+        <div class="lineage-year">2001</div>
+        <div class="lineage-name">Allen / GTD</div>
+        <div class="lineage-desc">捕捉→整理→実行</div>
+      </div>
+      <div class="lineage-arrow">&#8594;</div>
+      <div class="lineage-node">
+        <div class="lineage-year">2016</div>
+        <div class="lineage-name">Newport / Deep Work</div>
+        <div class="lineage-desc">深い集中の確保</div>
+      </div>
+      <div class="lineage-arrow">&#8594;</div>
+      <div class="lineage-node">
+        <div class="lineage-year">2024</div>
+        <div class="lineage-name">TimeCrowd</div>
+        <div class="lineage-desc">ドラッカーの提言の<br>デジタル実装</div>
+      </div>
+      <div class="lineage-arrow">&#8594;</div>
+      <div class="lineage-node">
+        <div class="lineage-year">2026</div>
+        <div class="lineage-name">Time University</div>
+        <div class="lineage-desc">思想の体系的教育</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- School 1: Philosophy -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <div class="section-title">School of Philosophy</div>
+    </div>
+  </div>
+
+  <div class="school school-1">
+    <div class="school-header">
+      <div class="school-code">School 1 -- Philosophy</div>
+      <div class="school-name">Philosophy of Time</div>
+      <div class="school-objective">「時間を大切にすべき理由」を知的に理解する。有限性、時間貧困、生産性の逆説を通じて、時間設計のマインドセットを形成する。</div>
+      <div class="school-meta">
+        <div class="school-meta-item"><span class="school-meta-label">Courses</span> 5</div>
+        <div class="school-meta-item"><span class="school-meta-label">Format</span> Lecture + Discussion</div>
+        <div class="school-meta-item"><span class="school-meta-label">Duration</span> 60 min / session</div>
+      </div>
+    </div>
+    <table class="course-table">
+      <tr class="course-featured">
+        <td class="course-id">PHI-100</td>
+        <td>
+          <div class="course-title">Know Thy Time</div>
+          <div class="course-desc">ドラッカーの時間管理3ステップ: 記録 → 整理 → まとめる。Time University全体のOrigin Story。「記憶ではなく記録で」という1966年の提言が、なぜ今なお有効なのかを検証する。</div>
+        </td>
+        <td class="course-ref">Drucker (1966)</td>
+      </tr>
+      <tr>
+        <td class="course-id">PHI-101</td>
+        <td>
+          <div class="course-title">The 4,000 Weeks</div>
+          <div class="course-desc">人生80年 = 約4,000週。有限性を直視することから時間設計は始まる。pseudo-productivityの罠と「task orientation」の再発見。</div>
+        </td>
+        <td class="course-ref">Burkeman (2021)</td>
+      </tr>
+      <tr>
+        <td class="course-id">PHI-102</td>
+        <td>
+          <div class="course-title">Time Poverty</div>
+          <div class="course-desc">「忙しい」の正体を科学的に分解する。日本初の時間貧困尺度（横浜10,000世帯データ）と、時間をお金より重視する人が幸福である理由。</div>
+        </td>
+        <td class="course-ref">Miura (2025), Whillans, Zhu (2018)</td>
+      </tr>
+      <tr>
+        <td class="course-id">PHI-103</td>
+        <td>
+          <div class="course-title">Japan and Time</div>
+          <div class="course-desc">時計の普及が変えた日本人の労働観。「せっかち」はいつから始まったのか。文化的・歴史的視点から時間意識の変遷を辿る。</div>
+        </td>
+        <td class="course-ref">織田一朗</td>
+      </tr>
+      <tr>
+        <td class="course-id">PHI-104</td>
+        <td>
+          <div class="course-title">The Productivity Paradox</div>
+          <div class="course-desc">週55時間以上の労働は生産性ゼロ。「逆U字型」の実証データが示す、長時間労働の構造的無意味さ。日本マイクロソフト週4日トライアルの実例。</div>
+        </td>
+        <td class="course-ref">Pencavel (2015), 黒田 (2017)</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- School 2: Science -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <div class="section-title">School of Science</div>
+    </div>
+  </div>
+
+  <div class="school school-2">
+    <div class="school-header">
+      <div class="school-code">School 2 -- Science</div>
+      <div class="school-name">Science of Time</div>
+      <div class="school-objective">注意と集中のメカニズムを理解し、「時間の質」を設計する。認知科学・神経科学のエビデンスに基づき、なぜ中断が危険なのかを解明する。</div>
+      <div class="school-meta">
+        <div class="school-meta-item"><span class="school-meta-label">Courses</span> 5</div>
+        <div class="school-meta-item"><span class="school-meta-label">Format</span> Lecture + Lab</div>
+        <div class="school-meta-item"><span class="school-meta-label">Duration</span> 60 min / session</div>
+      </div>
+    </div>
+    <table class="course-table">
+      <tr>
+        <td class="course-id">SCI-201</td>
+        <td>
+          <div class="course-title">Attention Residue</div>
+          <div class="course-desc">タスクAからBに移った後も、Aへの注意が残り続ける「注意残余」現象。未完了タスクからの切替が最もパフォーマンスを低下させる。Ready-to-Resume Planによる対処法。</div>
+        </td>
+        <td class="course-ref">Leroy (2009, 2018)</td>
+      </tr>
+      <tr>
+        <td class="course-id">SCI-202</td>
+        <td>
+          <div class="course-title">The 47-Second Truth</div>
+          <div class="course-desc">2004年に2.5分だった注意持続時間が、2023年には47秒に。自己中断が全中断の49%。復帰に平均25分。通知頻度がスクリーンタイム総量より注意散漫の強い予測因子。</div>
+        </td>
+        <td class="course-ref">Gloria Mark (2023)</td>
+      </tr>
+      <tr>
+        <td class="course-id">SCI-203</td>
+        <td>
+          <div class="course-title">Neuroscience of Flow</div>
+          <div class="course-desc">フロー状態の神経基盤。前頭前皮質の明示的制御が低減する「一過性低前頭化」仮説。「豊富な経験」+「コントロールの解放」の2要因モデル。</div>
+        </td>
+        <td class="course-ref">Alameda (2022), Rosen (2024)</td>
+      </tr>
+      <tr>
+        <td class="course-id">SCI-204</td>
+        <td>
+          <div class="course-title">Work Engagement</div>
+          <div class="course-desc">「没頭」と「消耗」の違い。ワーク・エンゲイジメント尺度（UWES）で測る「活力・熱意・没頭」の3要素。集中の質は時間の量と同等以上に重要。</div>
+        </td>
+        <td class="course-ref">島津明人</td>
+      </tr>
+      <tr>
+        <td class="course-id">SCI-205</td>
+        <td>
+          <div class="course-title">Chronotype &amp; Rhythm</div>
+          <div class="course-desc">「いつ」が「何を」と同じくらい重要。成人の60%が中間型クロノタイプ。概日リズムの不一致が認知パフォーマンスを低下させる。</div>
+        </td>
+        <td class="course-ref">Chronobiology Int. (2025)</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- School 3: Management -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <div class="section-title">School of Management</div>
+    </div>
+  </div>
+
+  <div class="school school-3">
+    <div class="school-header">
+      <div class="school-code">School 3 -- Management</div>
+      <div class="school-name">Time Management</div>
+      <div class="school-objective">個人の時間管理から組織の時間設計へスケールする。フレームワーク比較、制度設計の実証データ、ピープルアナリティクスの視点を統合する。</div>
+      <div class="school-meta">
+        <div class="school-meta-item"><span class="school-meta-label">Courses</span> 6</div>
+        <div class="school-meta-item"><span class="school-meta-label">Format</span> Lecture + Case Study</div>
+        <div class="school-meta-item"><span class="school-meta-label">Duration</span> 60 min / session</div>
+      </div>
+    </div>
+    <table class="course-table">
+      <tr>
+        <td class="course-id">MGT-301</td>
+        <td>
+          <div class="course-title">Meta-Analysis of Time Management</div>
+          <div class="course-desc">158研究・53,957名のメタ分析。時間管理は生活満足度（ウェルビーイング）への効果がパフォーマンス向上より大きい。1990年代以降、効果は年々強化。</div>
+        </td>
+        <td class="course-ref">Aeon et al. (2021)</td>
+      </tr>
+      <tr>
+        <td class="course-id">MGT-302</td>
+        <td>
+          <div class="course-title">GTD / Pomodoro / Slow Productivity</div>
+          <div class="course-desc">3大フレームワーク比較。GTDの5ステップ、ポモドーロの科学的検証（組織的休憩 &gt; 自己調整休憩）、Slow Productivityの3原則。業務特性に応じた選択基準。</div>
+        </td>
+        <td class="course-ref">Allen, Biwer (2023), Newport (2024)</td>
+      </tr>
+      <tr>
+        <td class="course-id">MGT-303</td>
+        <td>
+          <div class="course-title">The 4-Day Week Evidence</div>
+          <div class="course-desc">英国61社・2,900名のパイロット。100%給与 / 80%労働時間 / 100%生産性維持。病欠65%減、バーンアウト71%低減、離職率57%減。92%が継続。</div>
+        </td>
+        <td class="course-ref">Schor (2023/2024)</td>
+      </tr>
+      <tr>
+        <td class="course-id">MGT-304</td>
+        <td>
+          <div class="course-title">Hybrid Work Science</div>
+          <div class="course-desc">Trip.com 1,612名のRCT。週2日在宅で離職率33%減。生産性やキャリア昇進への悪影響ゼロ。管理職の認知も実験後に改善。</div>
+        </td>
+        <td class="course-ref">Bloom et al. (2024) Nature</td>
+      </tr>
+      <tr>
+        <td class="course-id">MGT-305</td>
+        <td>
+          <div class="course-title">Team Time Design</div>
+          <div class="course-desc">チーム生産性向上の60%は個人能力ではなくチーム内の時間再配分による。フレキシブルワークが逆に時間貧困を再生産する「自律性のパラドックス」。</div>
+        </td>
+        <td class="course-ref">Shangguan (2025), Kotynkova (2025)</td>
+      </tr>
+      <tr>
+        <td class="course-id">MGT-306</td>
+        <td>
+          <div class="course-title">People Analytics &amp; Time</div>
+          <div class="course-desc">人事データとしての時間データ。ピープルアナリティクスの手法で時間配分の偏りを検出し、組織の意思決定に接続する。</div>
+        </td>
+        <td class="course-ref">大湾秀雄</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- School 4: Engineering -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <div class="section-title">School of Engineering</div>
+    </div>
+  </div>
+
+  <div class="school school-4">
+    <div class="school-header">
+      <div class="school-code">School 4 -- Engineering</div>
+      <div class="school-name">Time Engineering</div>
+      <div class="school-objective">時間を計測し、データに基づいて改善するスキルを身につける。主観と客観の乖離を体感し、計測 → 分析 → 再配分 → 再計測のサイクルを実践する。</div>
+      <div class="school-meta">
+        <div class="school-meta-item"><span class="school-meta-label">Courses</span> 5</div>
+        <div class="school-meta-item"><span class="school-meta-label">Format</span> Lecture + Hands-on Lab</div>
+        <div class="school-meta-item"><span class="school-meta-label">Duration</span> 60 min / session</div>
+        <div class="school-meta-item"><span class="school-meta-label">Tool</span> TimeCrowd</div>
+      </div>
+    </div>
+    <table class="course-table">
+      <tr class="course-featured">
+        <td class="course-id">ENG-401</td>
+        <td>
+          <div class="course-title">No Measurement, No Improvement</div>
+          <div class="course-desc">「自分では集中しているつもりが47秒で中断」-- 主観と客観の乖離を体感する。客観的な労働時間把握方法を使う労働者の方が生産性が高い。</div>
+        </td>
+        <td class="course-ref">J-STAGE (2026), Mark (2023)</td>
+      </tr>
+      <tr>
+        <td class="course-id">ENG-402</td>
+        <td>
+          <div class="course-title">Time Data Literacy</div>
+          <div class="course-desc">時間データの読み方・使い方。1日275回の中断、会議の60%がアドホック -- 計測で初めて見える構造的問題。</div>
+        </td>
+        <td class="course-ref">Microsoft NFW (2024)</td>
+      </tr>
+      <tr>
+        <td class="course-id">ENG-403</td>
+        <td>
+          <div class="course-title">Time Visualization</div>
+          <div class="course-desc">ダッシュボード設計と意思決定。時間データを可視化し、チーム・個人のパターンを構造的に把握する技法。</div>
+        </td>
+        <td class="course-ref">TimeCrowd</td>
+      </tr>
+      <tr>
+        <td class="course-id">ENG-404</td>
+        <td>
+          <div class="course-title">The Improvement Cycle</div>
+          <div class="course-desc">計測 → 分析 → 再配分 → 再計測。企業の時間計測データから意思決定を行うケーススタディ。</div>
+        </td>
+        <td class="course-ref">TimeCrowd Case Studies</td>
+      </tr>
+      <tr>
+        <td class="course-id">ENG-405</td>
+        <td>
+          <div class="course-title">Organizational Time Audit</div>
+          <div class="course-desc">チーム・部門レベルの時間構造分析。5人チームのトップ貢献者がチーム労働時間の60%超を投入 -- データで初めて見える偏り。</div>
+        </td>
+        <td class="course-ref">Shangguan (2025)</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- School 5: Future -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <div class="section-title">School of Future Studies</div>
+    </div>
+  </div>
+
+  <div class="school school-5">
+    <div class="school-header">
+      <div class="school-code">School 5 -- Future Studies</div>
+      <div class="school-name">Future of Time</div>
+      <div class="school-objective">AI時代に「時間を設計する」とはどういうことかを考える。時間圧縮の実証データと、その裏側にある批判的思考の危機・仕事の膨張パラドックスを検証する。</div>
+      <div class="school-meta">
+        <div class="school-meta-item"><span class="school-meta-label">Courses</span> 5</div>
+        <div class="school-meta-item"><span class="school-meta-label">Format</span> Lecture + Workshop</div>
+        <div class="school-meta-item"><span class="school-meta-label">Duration</span> 60 min / session</div>
+      </div>
+    </div>
+    <table class="course-table">
+      <tr>
+        <td class="course-id">FUT-501</td>
+        <td>
+          <div class="course-title">AI Productivity Evidence</div>
+          <div class="course-desc">ライティング時間40%短縮・品質18%向上（MIT 444名）。コンサル速度25%向上・品質40%以上向上（BCG 758名）。開発タスク55.8%高速化（GitHub Copilot）。</div>
+        </td>
+        <td class="course-ref">Noy (2023), Dell'Acqua (2023)</td>
+      </tr>
+      <tr>
+        <td class="course-id">FUT-502</td>
+        <td>
+          <div class="course-title">The Jagged Frontier</div>
+          <div class="course-desc">AIが得意/不得意な領域は直感に反する「ギザギザの技術フロンティア」。「ケンタウロス型」と「サイボーグ型」の2つのAI活用パターン。</div>
+        </td>
+        <td class="course-ref">Dell'Acqua et al. (2023) HBS</td>
+      </tr>
+      <tr>
+        <td class="course-id">FUT-503</td>
+        <td>
+          <div class="course-title">The Critical Thinking Crisis</div>
+          <div class="course-desc">生成AI使用で批判的思考の認知努力が大幅低下。AIへの信頼が高いほど思考しなくなる。時間節約の裏側で認知スキルの空洞化リスク。</div>
+        </td>
+        <td class="course-ref">Lee et al. (2025) CHI</td>
+      </tr>
+      <tr>
+        <td class="course-id">FUT-504</td>
+        <td>
+          <div class="course-title">The Work Expansion Paradox</div>
+          <div class="course-desc">AIで節約された時間は余暇に充てられず、「仕事の膨張」に吸収される。指示なくとも自発的にペースアップ。効率化しても「やること」が増えるだけ。</div>
+        </td>
+        <td class="course-ref">HBR (2025), Burkeman (2021)</td>
+      </tr>
+      <tr class="course-featured">
+        <td class="course-id">FUT-505</td>
+        <td>
+          <div class="course-title">Designing Time Reallocation</div>
+          <div class="course-desc">「時間を節約すること」と「時間を設計すること」は、まったく別の行為である。全講座の知見を統合し、自分自身の時間再配分計画を設計する。</div>
+        </td>
+        <td class="course-ref">全講座の統合</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ─── Closing Quote ─── -->
+  <div class="quote-block">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">
+      削減された時間を何に使うかは、使う人間が決める。
+    </div>
+    <div class="quote-author">-- Time University, FUT-505 Closing Statement</div>
+  </div>
+
+  <!-- ─── Faculty ─── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">F</div>
+      <div class="section-title">Faculty &amp; Academic Partners</div>
+    </div>
+  </div>
+
+  <div class="faculty-grid">
+    <div class="faculty-card">
+      <div class="faculty-name">一川 誠</div>
+      <div class="faculty-affiliation">千葉大学 教授 / 日本時間学会 会長</div>
+      <div class="faculty-role">School 1 -- Academic Advisor</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-name">井坂 康志</div>
+      <div class="faculty-affiliation">ものつくり大学 教授 / ドラッカー学会 共同代表</div>
+      <div class="faculty-role">School 1 -- Origin Story</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-name">河原 純一郎</div>
+      <div class="faculty-affiliation">北海道大学 教授</div>
+      <div class="faculty-role">School 2 -- Cognitive Science</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-name">島津 明人</div>
+      <div class="faculty-affiliation">慶應義塾大学 教授</div>
+      <div class="faculty-role">School 2 -- Work Engagement</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-name">大湾 秀雄</div>
+      <div class="faculty-affiliation">早稲田大学 教授</div>
+      <div class="faculty-role">School 3 -- People Analytics</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-name">鶴 光太郎</div>
+      <div class="faculty-affiliation">慶應義塾大学 教授 / RIETI</div>
+      <div class="faculty-role">School 3 -- Institutional Design</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-name">森川 正之</div>
+      <div class="faculty-affiliation">一橋大学 特任教授 / RIETI</div>
+      <div class="faculty-role">School 5 -- AI &times; Productivity</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-name">伊達 洋駆</div>
+      <div class="faculty-affiliation">ビジネスリサーチラボ / 東京大学</div>
+      <div class="faculty-role">School 2 -- Attention Residue (Business)</div>
+    </div>
+  </div>
+
+  <!-- ─── Core Reading ─── -->
+  <div class="section" style="margin-top: 48px;">
+    <div class="section-header">
+      <div class="section-number">R</div>
+      <div class="section-title">Core Reading List</div>
+    </div>
+  </div>
+
+  <div class="reading-list">
+    <h3>Required Texts</h3>
+    <div class="reading-item"><span class="reading-author">Drucker, P. F.</span> <span class="reading-title">The Effective Executive.</span> <span class="reading-pub">Harper Business, 1966/2006.</span></div>
+    <div class="reading-item"><span class="reading-author">Burkeman, O.</span> <span class="reading-title">Four Thousand Weeks: Time Management for Mortals.</span> <span class="reading-pub">Farrar, Straus and Giroux, 2021.</span></div>
+    <div class="reading-item"><span class="reading-author">Newport, C.</span> <span class="reading-title">Deep Work: Rules for Focused Success in a Distracted World.</span> <span class="reading-pub">Grand Central, 2016.</span></div>
+    <div class="reading-item"><span class="reading-author">Newport, C.</span> <span class="reading-title">Slow Productivity: The Lost Art of Accomplishment Without Burnout.</span> <span class="reading-pub">Portfolio/Penguin, 2024.</span></div>
+    <div class="reading-item"><span class="reading-author">Allen, D.</span> <span class="reading-title">Getting Things Done: The Art of Stress-Free Productivity.</span> <span class="reading-pub">Penguin, 2001/2015.</span></div>
+    <div class="reading-item"><span class="reading-author">Mark, G.</span> <span class="reading-title">Attention Span: A Groundbreaking Way to Restore Balance, Happiness and Productivity.</span> <span class="reading-pub">Hanover Square Press, 2023.</span></div>
+
+    <h3 style="margin-top: 24px;">Key Papers</h3>
+    <div class="reading-item"><span class="reading-author">Leroy, S.</span> (2009). Why is it so hard to do my work? <span class="reading-pub">Organizational Behavior and Human Decision Processes, 109(2), 168-181.</span></div>
+    <div class="reading-item"><span class="reading-author">Aeon, B., Faber, A., &amp; Panaccio, A.</span> (2021). Does time management work? A meta-analysis. <span class="reading-pub">PLOS ONE, 16(1), e0245066.</span></div>
+    <div class="reading-item"><span class="reading-author">Pencavel, J. H.</span> (2015). The productivity of working hours. <span class="reading-pub">IZA Discussion Paper 8129.</span></div>
+    <div class="reading-item"><span class="reading-author">Bloom, N. et al.</span> (2024). Hybrid working from home improves retention without damaging performance. <span class="reading-pub">Nature.</span></div>
+    <div class="reading-item"><span class="reading-author">Noy, S. &amp; Zhang, W.</span> (2023). Experimental evidence on the productivity effects of generative AI. <span class="reading-pub">Science.</span></div>
+    <div class="reading-item"><span class="reading-author">Dell'Acqua, F. et al.</span> (2023). Navigating the jagged technological frontier. <span class="reading-pub">HBS Working Paper 24-013.</span></div>
+    <div class="reading-item"><span class="reading-author">Lee, H. W. et al.</span> (2025). The impact of generative AI on critical thinking. <span class="reading-pub">CHI 2025.</span></div>
+  </div>
+
+</div>
+
+<!-- ─── Footer ─── -->
+<footer class="footer">
+  <div class="footer-logo">Time University</div>
+  <div>Course Catalog 2026-2027 | Powered by TimeCrowd</div>
+  <div style="margin-top: 8px;">The Science, Practice, and Philosophy of Time</div>
+</footer>
+
+</body>
+</html>

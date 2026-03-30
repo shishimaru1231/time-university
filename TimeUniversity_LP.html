@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time University -- Member Registration</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary: #4ECDC4;
+    --primary-dark: #26A69A;
+    --accent: #FF7043;
+    --accent-dark: #E64A19;
+    --bg: #F5F5F5;
+    --text: #333333;
+    --white: #FFFFFF;
+    --gray-100: #F8F9FA;
+    --gray-200: #E9ECEF;
+    --gray-300: #DEE2E6;
+    --gray-500: #6C757D;
+    --gray-700: #495057;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================
+     Hero Section
+     ============================ */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    color: var(--white);
+    padding: 120px 40px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(78,205,196,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 30%, rgba(255,112,67,0.05) 0%, transparent 50%);
+    animation: heroFloat 20s ease-in-out infinite;
+  }
+
+  @keyframes heroFloat {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(2%, -1%) rotate(1deg); }
+    66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--primary);
+    border: 1px solid rgba(78,205,196,0.4);
+    padding: 6px 20px;
+    border-radius: 20px;
+    margin-bottom: 32px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.05em;
+    margin-bottom: 40px;
+  }
+
+  .hero-catchcopy {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 48px;
+    letter-spacing: 0.1em;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--white);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 18px 48px;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(255,112,67,0.3);
+  }
+
+  .cta-button:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(255,112,67,0.4);
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    opacity: 0.4;
+    animation: scrollBounce 2s ease-in-out infinite;
+  }
+
+  .hero-scroll-hint svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--white);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ============================
+     Section common
+     ============================ */
+  .section {
+    padding: 100px 40px;
+  }
+
+  .section-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    font-size: 1rem;
+    color: var(--gray-500);
+    line-height: 1.8;
+    max-width: 680px;
+    margin-bottom: 48px;
+  }
+
+  /* ============================
+     Intellectual Lineage
+     ============================ */
+  .lineage {
+    background: var(--white);
+  }
+
+  .lineage-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+  }
+
+  .lineage-node {
+    text-align: center;
+    padding: 16px 20px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .lineage-node-year {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .lineage-node-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .lineage-node-sub {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 2px;
+  }
+
+  .lineage-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .lineage-arrow svg {
+    width: 32px;
+    height: 16px;
+    stroke: var(--primary);
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .lineage-quote {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 12px;
+    padding: 48px;
+    text-align: center;
+    position: relative;
+  }
+
+  .lineage-quote::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(78,205,196,0.15);
+    pointer-events: none;
+  }
+
+  .lineage-quote blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-style: italic;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0 auto 20px;
+  }
+
+  .lineage-quote cite {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-style: normal;
+    color: var(--primary);
+    letter-spacing: 0.05em;
+  }
+
+  /* ============================
+     5 Schools
+     ============================ */
+  .schools {
+    background: var(--bg);
+  }
+
+  .schools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .school-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--gray-200);
+  }
+
+  .school-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+
+  .school-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--primary);
+  }
+
+  .school-card-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gray-200);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .school-card-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 16px;
+  }
+
+  .school-card-icon svg {
+    width: 40px;
+    height: 40px;
+    stroke: var(--primary-dark);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .school-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .school-card-ja {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-bottom: 12px;
+  }
+
+  .school-card p {
+    font-size: 0.9rem;
+    color: var(--gray-700);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .school-card-courses {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    letter-spacing: 0.05em;
+  }
+
+  /* ============================
+     Numbers
+     ============================ */
+  .numbers {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    color: var(--white);
+    text-align: center;
+  }
+
+  .numbers .section-label {
+    color: var(--primary);
+  }
+
+  .numbers .section-title {
+    color: var(--white);
+  }
+
+  .numbers .section-desc {
+    color: rgba(255,255,255,0.5);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .number-item {
+    text-align: center;
+  }
+
+  .number-value {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .number-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.05em;
+  }
+
+  /* ============================
+     Faculty
+     ============================ */
+  .faculty {
+    background: var(--white);
+  }
+
+  .faculty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .faculty-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid var(--gray-200);
+    transition: border-color 0.3s ease;
+  }
+
+  .faculty-card:hover {
+    border-color: var(--primary);
+  }
+
+  .faculty-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .faculty-avatar span {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .faculty-info h4 {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .faculty-info .faculty-affiliation {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    line-height: 1.5;
+  }
+
+  .faculty-note {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    font-style: italic;
+  }
+
+  /* ============================
+     Benefits
+     ============================ */
+  .benefits {
+    background: var(--bg);
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .benefit-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 32px 28px;
+    border: 1px solid var(--gray-200);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .benefit-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  }
+
+  .benefit-icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 16px;
+  }
+
+  .benefit-icon svg {
+    width: 44px;
+    height: 44px;
+    stroke: var(--primary-dark);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .benefit-card h4 {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .benefit-card p {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    line-height: 1.7;
+  }
+
+  /* ============================
+     Registration Form
+     ============================ */
+  .registration {
+    background: var(--white);
+    position: relative;
+  }
+
+  .registration-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .registration .section-title {
+    text-align: center;
+  }
+
+  .registration .section-desc {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .reg-form {
+    text-align: left;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+  }
+
+  .form-group label {
+    display: block;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .form-group label .required {
+    font-size: 0.7rem;
+    color: var(--accent);
+    margin-left: 6px;
+    font-weight: 600;
+  }
+
+  .form-group label .optional {
+    font-size: 0.7rem;
+    color: var(--gray-500);
+    margin-left: 6px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--gray-100);
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .form-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(78,205,196,0.15);
+  }
+
+  .form-group input::placeholder {
+    color: var(--gray-500);
+    font-size: 0.85rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-submit {
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  .form-submit .cta-button {
+    width: 100%;
+    padding: 18px 48px;
+    font-size: 1.05rem;
+  }
+
+  .form-privacy {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+  }
+
+  /* ============================
+     Closing
+     ============================ */
+  .closing {
+    background: var(--bg);
+    text-align: center;
+    padding: 80px 40px;
+  }
+
+  .closing-message {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.08em;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .closing-line {
+    width: 60px;
+    height: 2px;
+    background: var(--primary);
+    margin: 24px auto 0;
+  }
+
+  /* ============================
+     Footer
+     ============================ */
+  .footer {
+    background: #1a1a2e;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 48px 40px;
+  }
+
+  .footer-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 16px;
+  }
+
+  .footer-powered {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .footer-powered span {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .footer-company {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ============================
+     Responsive
+     ============================ */
+  @media (max-width: 768px) {
+    .hero {
+      padding: 100px 24px 80px;
+      min-height: 90vh;
+    }
+
+    .section {
+      padding: 72px 24px;
+    }
+
+    .lineage-timeline {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .lineage-arrow {
+      transform: rotate(90deg);
+    }
+
+    .lineage-quote {
+      padding: 32px 24px;
+    }
+
+    .schools-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .numbers-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .faculty-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .closing {
+      padding: 60px 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero {
+      padding: 80px 20px 60px;
+    }
+
+    .section {
+      padding: 56px 20px;
+    }
+
+    .numbers-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .lineage-quote {
+      padding: 24px 16px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================
+     Hero Section
+     ============================ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Free Membership Program</div>
+    <h1>Time University</h1>
+    <div class="hero-subtitle">The Science, Practice, and Philosophy of Time</div>
+    <div class="hero-catchcopy">時間を科学する。</div>
+    <a href="#registration" class="cta-button">無料で会員登録</a>
+  </div>
+  <div class="hero-scroll-hint">
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  </div>
+</section>
+
+<!-- ============================
+     Intellectual Lineage
+     ============================ -->
+<section class="section lineage">
+  <div class="section-inner">
+    <div class="section-label">Intellectual Lineage</div>
+    <div class="section-title">思想の系譜</div>
+    <div class="section-desc">
+      1966年にドラッカーが提唱した時間管理の原則は、半世紀以上にわたり実践手法として進化を続けてきました。Time Universityはその知の系譜を体系的に学ぶ場です。
+    </div>
+
+    <div class="lineage-timeline">
+      <div class="lineage-node">
+        <div class="lineage-node-year">1966</div>
+        <div class="lineage-node-name">Drucker</div>
+        <div class="lineage-node-sub">The Effective Executive</div>
+      </div>
+      <div class="lineage-arrow">
+        <svg viewBox="0 0 32 16"><line x1="2" y1="8" x2="26" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
+      </div>
+      <div class="lineage-node">
+        <div class="lineage-node-year">2001</div>
+        <div class="lineage-node-name">GTD</div>
+        <div class="lineage-node-sub">David Allen</div>
+      </div>
+      <div class="lineage-arrow">
+        <svg viewBox="0 0 32 16"><line x1="2" y1="8" x2="26" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
+      </div>
+      <div class="lineage-node">
+        <div class="lineage-node-year">2016</div>
+        <div class="lineage-node-name">Deep Work</div>
+        <div class="lineage-node-sub">Cal Newport</div>
+      </div>
+      <div class="lineage-arrow">
+        <svg viewBox="0 0 32 16"><line x1="2" y1="8" x2="26" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
+      </div>
+      <div class="lineage-node">
+        <div class="lineage-node-year">2015 --</div>
+        <div class="lineage-node-name">TimeCrowd</div>
+        <div class="lineage-node-sub">Digital Implementation</div>
+      </div>
+      <div class="lineage-arrow">
+        <svg viewBox="0 0 32 16"><line x1="2" y1="8" x2="26" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
+      </div>
+      <div class="lineage-node">
+        <div class="lineage-node-year">2026</div>
+        <div class="lineage-node-name">Time University</div>
+        <div class="lineage-node-sub">Systematic Education</div>
+      </div>
+    </div>
+
+    <div class="lineage-quote">
+      <blockquote>
+        "Effective executives do not start with their tasks.<br>
+        They start with their time."
+      </blockquote>
+      <cite>-- Peter F. Drucker, <em>The Effective Executive</em> (1966)</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+     5 Schools
+     ============================ -->
+<section class="section schools">
+  <div class="section-inner">
+    <div class="section-label">Curriculum</div>
+    <div class="section-title">5 Schools</div>
+    <div class="section-desc">
+      「時間」を5つの学問領域から体系的に学ぶカリキュラム。哲学から実装、未来構想まで。
+    </div>
+
+    <div class="schools-grid">
+
+      <div class="school-card">
+        <div class="school-card-number">01</div>
+        <div class="school-card-icon">
+          <svg viewBox="0 0 40 40"><circle cx="20" cy="14" r="6"/><path d="M8 36c0-6.627 5.373-12 12-12s12 5.373 12 12"/><line x1="20" y1="6" x2="20" y2="2"/><circle cx="20" cy="2" r="1" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <h3>Philosophy of Time</h3>
+        <div class="school-card-ja">時間の有限性・価値・歴史</div>
+        <p>時間とは何か。ドラッカー、ベルグソン、ハイデガーから現代の行動経済学まで、「時間」の本質を哲学的に探求します。</p>
+        <div class="school-card-courses">6 Courses</div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-number">02</div>
+        <div class="school-card-icon">
+          <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><path d="M14 20c0-3.314 2.686-6 6-6s6 2.686 6 6"/><circle cx="20" cy="20" r="2"/><path d="M12 12l-2-2M28 12l2-2M12 28l-2 2M28 28l2 2"/></svg>
+        </div>
+        <h3>Science of Time</h3>
+        <div class="school-card-ja">注意・集中・認知科学</div>
+        <p>注意資源、認知負荷、時間知覚。脳科学と心理学の知見から、人間が時間をどう認識し、どう使うかを科学的に解明します。</p>
+        <div class="school-card-courses">6 Courses</div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-number">03</div>
+        <div class="school-card-icon">
+          <svg viewBox="0 0 40 40"><rect x="6" y="8" width="28" height="24" rx="2"/><line x1="6" y1="16" x2="34" y2="16"/><line x1="14" y1="8" x2="14" y2="16"/><line x1="26" y1="8" x2="26" y2="16"/><rect x="12" y="22" width="6" height="4" rx="1"/><rect x="22" y="22" width="6" height="4" rx="1"/></svg>
+        </div>
+        <h3>Time Management</h3>
+        <div class="school-card-ja">組織設計・フレームワーク</div>
+        <p>個人と組織の時間設計。GTD、タイムボクシング、Deep Workから組織の時間文化構築まで、実践的フレームワークを学びます。</p>
+        <div class="school-card-courses">5 Courses</div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-number">04</div>
+        <div class="school-card-icon">
+          <svg viewBox="0 0 40 40"><polyline points="6 30 14 18 22 24 34 10"/><circle cx="34" cy="10" r="2"/><line x1="6" y1="6" x2="6" y2="34"/><line x1="6" y1="34" x2="38" y2="34"/></svg>
+        </div>
+        <h3>Time Engineering</h3>
+        <div class="school-card-ja">計測・データ・改善サイクル</div>
+        <p>計測なき改善なし。時間データの取得・分析・活用サイクルを通じて、エビデンスに基づく時間設計を実践します。</p>
+        <div class="school-card-courses">5 Courses</div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-number">05</div>
+        <div class="school-card-icon">
+          <svg viewBox="0 0 40 40"><path d="M20 6v4M20 30v4M6 20h4M30 20h4"/><circle cx="20" cy="20" r="10"/><path d="M16 18l4 4 6-6"/></svg>
+        </div>
+        <h3>Future of Time</h3>
+        <div class="school-card-ja">AI x 時間・再配分設計</div>
+        <p>AIが労働時間を代替する時代に、人間は「余った時間」をどう使うか。時間の再配分設計という新しい問いに向き合います。</p>
+        <div class="school-card-courses">4 Courses</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+     Numbers
+     ============================ -->
+<section class="section numbers">
+  <div class="section-inner">
+    <div class="section-label">Overview</div>
+    <div class="section-title" style="color: #fff;">数字で見る Time University</div>
+    <div class="section-desc" style="margin-left:auto;margin-right:auto;">
+      5つの学問領域を横断する体系的カリキュラム。
+    </div>
+
+    <div class="numbers-grid">
+      <div class="number-item">
+        <div class="number-value">5</div>
+        <div class="number-label">Schools</div>
+      </div>
+      <div class="number-item">
+        <div class="number-value">26</div>
+        <div class="number-label">Courses</div>
+      </div>
+      <div class="number-item">
+        <div class="number-value">31+</div>
+        <div class="number-label">Academic Sources</div>
+      </div>
+      <div class="number-item">
+        <div class="number-value">8</div>
+        <div class="number-label">University Partners (planned)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+     Faculty
+     ============================ -->
+<section class="section faculty">
+  <div class="section-inner">
+    <div class="section-label">Academic Partners</div>
+    <div class="section-title">Faculty</div>
+    <div class="section-desc">
+      各分野の第一線で活躍する研究者をゲスト講師としてお迎えします。
+    </div>
+
+    <div class="faculty-grid">
+
+      <div class="faculty-card">
+        <div class="faculty-avatar"><span>一</span></div>
+        <div class="faculty-info">
+          <h4>一川 誠</h4>
+          <div class="faculty-affiliation">千葉大学 教授<br>日本時間学会 会長 / 時間知覚</div>
+        </div>
+      </div>
+
+      <div class="faculty-card">
+        <div class="faculty-avatar"><span>井</span></div>
+        <div class="faculty-info">
+          <h4>井坂 康志</h4>
+          <div class="faculty-affiliation">ものつくり大学 教授<br>ドラッカー学会 共同代表 / ドラッカー研究</div>
+        </div>
+      </div>
+
+      <div class="faculty-card">
+        <div class="faculty-avatar"><span>河</span></div>
+        <div class="faculty-info">
+          <h4>河原 純一郎</h4>
+          <div class="faculty-affiliation">北海道大学 教授<br>認知心理学・注意研究</div>
+        </div>
+      </div>
+
+      <div class="faculty-card">
+        <div class="faculty-avatar"><span>島</span></div>
+        <div class="faculty-info">
+          <h4>島津 明人</h4>
+          <div class="faculty-affiliation">慶應義塾大学 教授<br>ワーク・エンゲイジメント</div>
+        </div>
+      </div>
+
+      <div class="faculty-card">
+        <div class="faculty-avatar"><span>大</span></div>
+        <div class="faculty-info">
+          <h4>大湾 秀雄</h4>
+          <div class="faculty-affiliation">早稲田大学 教授<br>労働経済学・人事経済学</div>
+        </div>
+      </div>
+
+      <div class="faculty-card">
+        <div class="faculty-avatar"><span>森</span></div>
+        <div class="faculty-info">
+          <h4>森川 正之</h4>
+          <div class="faculty-affiliation">一橋大学 特任教授 / RIETI<br>生産性・サービス経済</div>
+        </div>
+      </div>
+
+      <div class="faculty-card">
+        <div class="faculty-avatar"><span>伊</span></div>
+        <div class="faculty-info">
+          <h4>伊達 洋駆</h4>
+          <div class="faculty-affiliation">ビジネスリサーチラボ / 東京大学<br>組織行動・人事データ分析</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="faculty-note">
+      * Academic Partners (予定) -- 交渉・調整中の候補者を含みます
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+     Benefits
+     ============================ -->
+<section class="section benefits">
+  <div class="section-inner">
+    <div class="section-label">Membership Benefits</div>
+    <div class="section-title">会員特典</div>
+    <div class="section-desc">
+      Time Universityの全コンテンツは無料でご利用いただけます。
+    </div>
+
+    <div class="benefits-grid">
+
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" rx="3"/><line x1="14" y1="14" x2="30" y2="14"/><line x1="14" y1="22" x2="30" y2="22"/><line x1="14" y1="30" x2="24" y2="30"/></svg>
+        </div>
+        <h4>全コンテンツ無料アクセス</h4>
+        <p>5 Schools・26 Coursesの全講義テキスト、スライド、参考文献リストに無制限でアクセスできます。</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 44 44"><rect x="4" y="8" width="36" height="28" rx="3"/><polyline points="4 16 22 26 40 16"/></svg>
+        </div>
+        <h4>Weekly Digest</h4>
+        <p>週1回、最新の講義ハイライト・学術論文紹介・実践Tipsをメールでお届けします。</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="14"/><polygon points="18 14 32 22 18 30"/></svg>
+        </div>
+        <h4>月1回のライブ講義</h4>
+        <p>ゲスト講師によるライブ講義を毎月開催。アーカイブ視聴にも対応しています。</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="16"/><path d="M16 22c0-3.314 2.686-6 6-6s6 2.686 6 6-2.686 6-6 6"/><line x1="22" y1="12" x2="22" y2="16"/><line x1="22" y1="28" x2="22" y2="32"/></svg>
+        </div>
+        <h4>Podcast (Audio Overview)</h4>
+        <p>各コースの概要を音声で。通勤中や移動中にも学習を継続できます。</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 44 44"><circle cx="16" cy="18" r="5"/><circle cx="28" cy="18" r="5"/><path d="M6 36c0-5.523 4.477-10 10-10h12c5.523 0 10 4.477 10 10"/></svg>
+        </div>
+        <h4>コミュニティ参加</h4>
+        <p>受講者同士のディスカッション、ゲスト講師へのQ&A、学びの共有ができるコミュニティに参加できます。</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+     Registration Form
+     ============================ -->
+<section class="section registration" id="registration">
+  <div class="section-inner registration-inner">
+    <div class="section-label" style="text-align:center;">Join Us</div>
+    <div class="section-title" style="text-align:center;">無料会員登録</div>
+    <div class="section-desc" style="text-align:center;margin-left:auto;margin-right:auto;">
+      Time Universityの全コンテンツに無料でアクセスできます。<br>
+      まずはメールアドレスをご登録ください。
+    </div>
+
+    <form class="reg-form" action="#" method="post">
+
+      <div class="form-group">
+        <label>メールアドレス<span class="required">必須</span></label>
+        <input type="email" name="email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label>氏名<span class="required">必須</span></label>
+        <input type="text" name="name" placeholder="山田 太郎" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>所属企業<span class="optional">任意</span></label>
+          <input type="text" name="company" placeholder="株式会社サンプル">
+        </div>
+        <div class="form-group">
+          <label>役職<span class="optional">任意</span></label>
+          <input type="text" name="title" placeholder="経営企画部 マネージャー">
+        </div>
+      </div>
+
+      <div class="form-submit">
+        <button type="submit" class="cta-button">無料で登録する</button>
+      </div>
+
+      <div class="form-privacy">
+        ご登録いただいた情報は、Time Universityの運営にのみ使用します。
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<!-- ============================
+     Closing
+     ============================ -->
+<section class="closing">
+  <div class="closing-message">
+    削減された時間を何に使うかは、使う人間が決める。
+  </div>
+  <div class="closing-line"></div>
+</section>
+
+<!-- ============================
+     Footer
+     ============================ -->
+<footer class="footer">
+  <div class="footer-tagline">The Science, Practice, and Philosophy of Time</div>
+  <div class="footer-powered">Powered by <span>TimeCrowd</span></div>
+  <div class="footer-company">タイムクラウド株式会社</div>
+</footer>
+
+</body>
+</html>

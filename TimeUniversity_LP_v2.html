@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time University - The Science, Practice, and Philosophy of Time</title>
+<meta name="description" content="時間を科学する。ドラッカーの提言を学問として体系化する、日本初の無料教育プログラム。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CSS Custom Properties (Design System Tokens)
+   ============================================ */
+:root {
+  /* Primary */
+  --primary: #4ECDC4;
+  --primary-dark: #26A69A;
+  --primary-light: rgba(78,205,196,0.08);
+
+  /* Accent */
+  --accent: #FF7043;
+  --accent-dark: #E64A19;
+  --accent-light: rgba(255,112,67,0.08);
+
+  /* Neutrals */
+  --bg: #F5F5F5;
+  --surface: #FFFFFF;
+  --text: #333333;
+  --text-secondary: #6C757D;
+  --text-tertiary: #ADB5BD;
+  --border: #E9ECEF;
+
+  /* Dark Theme */
+  --dark-bg: #0D1117;
+  --dark-surface: #161B22;
+  --dark-text: #E6EDF3;
+  --dark-text-secondary: rgba(255,255,255,0.5);
+
+  /* Spacing (8px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* Animation */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   Reset & Base
+   ============================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+.display {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+h1, .h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h2, .h2 {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h3, .h3 {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.body-large {
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.body-small {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.overline {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   Layout
+   ============================================ */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+.section {
+  padding: var(--space-10) 0;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding: 0 40px;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: var(--accent);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  box-shadow: 0 4px 14px rgba(255,112,67,0.3);
+  text-decoration: none;
+}
+
+.btn-cta:hover {
+  background: var(--accent-dark);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255,112,67,0.4);
+}
+
+.btn-cta:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-light), 0 4px 14px rgba(255,112,67,0.3);
+}
+
+/* ============================================
+   Cards
+   ============================================ */
+.card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: var(--space-6);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  border: 1px solid transparent;
+  transition: all 0.4s var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  border-color: var(--primary);
+}
+
+/* ============================================
+   Scroll Reveal Animation
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-child {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.reveal-child.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   Section 1: Hero
+   ============================================ */
+.hero {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+  padding: var(--space-9) 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 80%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(78,205,196,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.hero .overline {
+  color: var(--primary);
+  margin-bottom: var(--space-6);
+}
+
+.hero .display {
+  margin-bottom: var(--space-4);
+}
+
+.hero-subhead {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--dark-text-secondary);
+  margin-bottom: var(--space-8);
+  letter-spacing: 1px;
+}
+
+.hero-lead {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: var(--space-5);
+}
+
+.hero-body {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--dark-text-secondary);
+  max-width: 640px;
+  margin-bottom: var(--space-7);
+}
+
+.hero .btn-cta {
+  margin-top: var(--space-2);
+}
+
+/* ============================================
+   Section 2: Problem Statement
+   ============================================ */
+.problem {
+  padding: var(--space-10) 0;
+}
+
+.problem .overline {
+  color: var(--primary);
+  margin-bottom: var(--space-4);
+}
+
+.problem h1 {
+  margin-bottom: var(--space-8);
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.problem-card .stat {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.1;
+  margin-bottom: var(--space-4);
+}
+
+.problem-card .card-body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: var(--space-4);
+}
+
+.problem-card .source {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-3);
+}
+
+/* ============================================
+   Section 3: Intellectual Lineage
+   ============================================ */
+.lineage {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+  padding: var(--space-10) 0;
+}
+
+.lineage .overline {
+  color: var(--primary);
+  margin-bottom: var(--space-4);
+}
+
+.lineage h1 {
+  margin-bottom: var(--space-8);
+}
+
+.timeline {
+  position: relative;
+  padding: var(--space-6) 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+  transform: translateX(-50%);
+}
+
+.timeline-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: var(--space-7);
+}
+
+.timeline-node:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-year {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  width: 120px;
+  text-align: right;
+  padding-right: var(--space-6);
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 3px solid var(--dark-bg);
+  box-shadow: 0 0 0 2px var(--primary);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.timeline-content {
+  width: 120px;
+  padding-left: var(--space-6);
+}
+
+.timeline-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--dark-text);
+}
+
+.timeline-desc {
+  font-size: 0.875rem;
+  color: var(--dark-text-secondary);
+  line-height: 1.5;
+}
+
+.lineage-quote {
+  margin-top: var(--space-8);
+  padding: var(--space-6);
+  background: var(--dark-surface);
+  border-radius: 16px;
+  border-left: 3px solid var(--primary);
+}
+
+.lineage-quote blockquote {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--dark-text);
+  font-style: italic;
+}
+
+.lineage-quote cite {
+  display: block;
+  margin-top: var(--space-4);
+  font-style: normal;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: var(--dark-text-secondary);
+}
+
+/* ============================================
+   Section 4: 5 Schools
+   ============================================ */
+.schools {
+  padding: var(--space-10) 0;
+}
+
+.schools .overline {
+  color: var(--primary);
+  margin-bottom: var(--space-4);
+}
+
+.schools h1 {
+  margin-bottom: var(--space-8);
+}
+
+.schools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.schools-grid .card:nth-child(4),
+.schools-grid .card:nth-child(5) {
+  /* Center the last two cards */
+}
+
+.school-code {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: var(--space-3);
+}
+
+.school-name {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: var(--space-4);
+}
+
+.school-desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-5);
+}
+
+.school-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.school-courses {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.school-keywords {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   Section 5: Evidence
+   ============================================ */
+.evidence {
+  background: var(--primary-dark);
+  color: #FFFFFF;
+  padding: var(--space-9) 0;
+}
+
+.evidence .overline {
+  color: rgba(255,255,255,0.7);
+  margin-bottom: var(--space-7);
+  text-align: center;
+}
+
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.evidence-stat .number {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #FFFFFF;
+}
+
+.evidence-stat .number-suffix {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+}
+
+.evidence-stat .stat-label {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.7);
+  margin-top: var(--space-2);
+}
+
+.evidence-stat .stat-note {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+  margin-top: var(--space-1);
+}
+
+/* ============================================
+   Section 6: Faculty
+   ============================================ */
+.faculty {
+  padding: var(--space-10) 0;
+}
+
+.faculty .overline {
+  color: var(--primary);
+  margin-bottom: var(--space-4);
+}
+
+.faculty h1 {
+  margin-bottom: var(--space-2);
+}
+
+.faculty-note {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-8);
+}
+
+.faculty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.faculty-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: var(--space-6);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  border: 1px solid transparent;
+  transition: all 0.4s var(--ease);
+  text-align: center;
+}
+
+.faculty-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  border-color: var(--primary);
+}
+
+.faculty-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4);
+  color: var(--primary);
+}
+
+.faculty-avatar svg {
+  width: 28px;
+  height: 28px;
+}
+
+.faculty-name {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--space-2);
+}
+
+.faculty-affiliation {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.faculty-field {
+  font-size: 0.75rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+  margin-top: var(--space-2);
+}
+
+/* ============================================
+   Section 7: Member Benefits
+   ============================================ */
+.benefits {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+  padding: var(--space-10) 0;
+}
+
+.benefits .overline {
+  color: var(--primary);
+  margin-bottom: var(--space-4);
+}
+
+.benefits h1 {
+  margin-bottom: var(--space-8);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.benefit-card {
+  background: var(--dark-surface);
+  border-radius: 16px;
+  padding: var(--space-6);
+  border: 1px solid transparent;
+  transition: all 0.4s var(--ease);
+}
+
+.benefit-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.benefit-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(78,205,196,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-5);
+  color: var(--primary);
+}
+
+.benefit-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.benefit-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--dark-text);
+  margin-bottom: var(--space-2);
+}
+
+.benefit-desc {
+  font-size: 0.875rem;
+  color: var(--dark-text-secondary);
+  line-height: 1.6;
+}
+
+/* ============================================
+   Section 8: Registration Form
+   ============================================ */
+.registration {
+  padding: var(--space-10) 0;
+}
+
+.registration .overline {
+  color: var(--primary);
+  margin-bottom: var(--space-4);
+}
+
+.registration h1 {
+  margin-bottom: var(--space-3);
+}
+
+.registration-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-7);
+}
+
+.form-wrapper {
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: var(--space-7);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.form-group {
+  margin-bottom: var(--space-5);
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--space-2);
+}
+
+.form-group label .required {
+  color: var(--accent);
+  margin-left: var(--space-1);
+  font-size: 0.75rem;
+}
+
+.form-group label .optional {
+  color: var(--text-tertiary);
+  margin-left: var(--space-1);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.form-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--surface);
+  transition: all 0.2s var(--ease);
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-submit {
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
+.form-note {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: var(--space-4);
+}
+
+/* ============================================
+   Section 9: Closing Quote
+   ============================================ */
+.closing {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+  padding: var(--space-9) 0;
+  text-align: center;
+}
+
+.closing blockquote {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   Section 10: Footer
+   ============================================ */
+.footer {
+  background: var(--dark-bg);
+  color: var(--dark-text-secondary);
+  padding: var(--space-7) 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: var(--space-3);
+}
+
+.footer-powered {
+  font-size: 0.875rem;
+  color: var(--dark-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.footer-tagline {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   Responsive: Tablet (768px - 1199px)
+   ============================================ */
+@media (max-width: 1199px) {
+  .problem-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .schools-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .evidence-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .faculty-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .timeline-year {
+    width: 100px;
+  }
+
+  .timeline-content {
+    width: auto;
+    flex: 1;
+  }
+}
+
+/* ============================================
+   Responsive: Mobile (< 768px)
+   ============================================ */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 var(--space-4);
+  }
+
+  .section {
+    padding: var(--space-7) 0;
+  }
+
+  /* Typography mobile overrides */
+  .display {
+    font-size: 2.25rem;
+  }
+
+  h1, .h1 {
+    font-size: 1.75rem;
+  }
+
+  h2, .h2 {
+    font-size: 1.375rem;
+  }
+
+  /* Hero */
+  .hero {
+    padding: var(--space-7) 0;
+    min-height: auto;
+  }
+
+  .hero-subhead {
+    font-size: 1rem;
+  }
+
+  .hero-lead {
+    font-size: 1.375rem;
+  }
+
+  .hero-body {
+    font-size: 1rem;
+  }
+
+  /* Problem */
+  .problem {
+    padding: var(--space-7) 0;
+  }
+
+  .problem-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .problem-card .stat {
+    font-size: 2.5rem;
+  }
+
+  /* Timeline */
+  .lineage {
+    padding: var(--space-7) 0;
+  }
+
+  .timeline::before {
+    left: 7px;
+  }
+
+  .timeline-node {
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: var(--space-6);
+  }
+
+  .timeline-year {
+    width: auto;
+    text-align: left;
+    padding-right: var(--space-4);
+    font-size: 1.125rem;
+    min-width: 60px;
+  }
+
+  .timeline-dot {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+  }
+
+  .timeline-content {
+    width: auto;
+    flex: 1;
+    padding-left: var(--space-4);
+  }
+
+  .lineage-quote blockquote {
+    font-size: 1.125rem;
+  }
+
+  /* Schools */
+  .schools {
+    padding: var(--space-7) 0;
+  }
+
+  .schools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: var(--space-4);
+  }
+
+  /* Evidence */
+  .evidence {
+    padding: var(--space-7) 0;
+  }
+
+  .evidence-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+  }
+
+  .evidence-stat .number {
+    font-size: 2.5rem;
+  }
+
+  .evidence-stat .number-suffix {
+    font-size: 1.5rem;
+  }
+
+  /* Faculty */
+  .faculty {
+    padding: var(--space-7) 0;
+  }
+
+  .faculty-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .faculty-card {
+    padding: var(--space-5);
+  }
+
+  /* Benefits */
+  .benefits {
+    padding: var(--space-7) 0;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .benefit-card {
+    padding: var(--space-5);
+  }
+
+  /* Registration */
+  .registration {
+    padding: var(--space-7) 0;
+  }
+
+  .form-wrapper {
+    padding: var(--space-5);
+  }
+
+  /* Closing */
+  .closing {
+    padding: var(--space-7) 0;
+  }
+
+  .closing blockquote {
+    font-size: 1.25rem;
+  }
+}
+
+/* ============================================
+   Focus ring utility
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: none;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     Section 1: Hero
+     ============================================ -->
+<section class="hero" id="hero">
+  <div class="container">
+    <p class="overline reveal">COURSE CATALOG 2026-2027</p>
+    <h1 class="display reveal">Time University</h1>
+    <p class="hero-subhead reveal">The Science, Practice, and Philosophy of Time</p>
+    <p class="hero-lead reveal">時間を科学する。</p>
+    <p class="hero-body reveal">ドラッカーが1966年に「時間を記録せよ」と書いてから58年。その提言を学問として体系化する、日本初の無料教育プログラム。</p>
+    <a href="#registration" class="btn-cta reveal">無料で会員登録する</a>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 2: Problem Statement
+     ============================================ -->
+<section class="problem section" id="problem">
+  <div class="container">
+    <p class="overline reveal">THE PROBLEM</p>
+    <h1 class="reveal">あなたの「忙しい」の正体</h1>
+    <div class="problem-grid">
+      <div class="card problem-card reveal-child">
+        <div class="stat">47秒</div>
+        <p class="card-body">現代人の注意持続時間。2004年の2.5分から急落した。</p>
+        <p class="source">Gloria Mark, UCI (2023)</p>
+      </div>
+      <div class="card problem-card reveal-child">
+        <div class="stat">55時間</div>
+        <p class="card-body">この壁を超えると、追加の労働は生産性ゼロ。</p>
+        <p class="source">Pencavel, Stanford (2015)</p>
+      </div>
+      <div class="card problem-card reveal-child">
+        <div class="stat">49%</div>
+        <p class="card-body">すべての中断のうち、自分自身が引き起こしている割合。</p>
+        <p class="source">Gloria Mark, UCI (2023)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 3: Intellectual Lineage
+     ============================================ -->
+<section class="lineage section" id="lineage">
+  <div class="container">
+    <p class="overline reveal">INTELLECTUAL LINEAGE</p>
+    <h1 class="reveal">思想の系譜</h1>
+    <div class="timeline reveal">
+      <div class="timeline-node reveal-child">
+        <div class="timeline-year">1966</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-name">Drucker</div>
+          <div class="timeline-desc">「汝の時間を知れ」</div>
+        </div>
+      </div>
+      <div class="timeline-node reveal-child">
+        <div class="timeline-year">2001</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-name">Allen</div>
+          <div class="timeline-desc">GTD</div>
+        </div>
+      </div>
+      <div class="timeline-node reveal-child">
+        <div class="timeline-year">2016</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-name">Newport</div>
+          <div class="timeline-desc">Deep Work</div>
+        </div>
+      </div>
+      <div class="timeline-node reveal-child">
+        <div class="timeline-year">2024</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-name">TimeCrowd</div>
+          <div class="timeline-desc">デジタル実装</div>
+        </div>
+      </div>
+      <div class="timeline-node reveal-child">
+        <div class="timeline-year">2026</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-name">Time University</div>
+          <div class="timeline-desc">体系的教育</div>
+        </div>
+      </div>
+    </div>
+    <div class="lineage-quote reveal">
+      <blockquote>"Effective executives do not start with their tasks. They start with their time."</blockquote>
+      <cite>-- Peter F. Drucker, The Effective Executive (1966)</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 4: 5 Schools
+     ============================================ -->
+<section class="schools section" id="schools">
+  <div class="container">
+    <p class="overline reveal">CURRICULUM</p>
+    <h1 class="reveal">5 Schools, 26 Courses</h1>
+    <div class="schools-grid">
+      <div class="card reveal-child">
+        <div class="school-code">SCHOOL 1</div>
+        <h3 class="school-name">Philosophy of Time</h3>
+        <p class="school-desc">時間の有限性・価値・歴史。なぜ時間を大切にすべきかのマインドセットを形成する。</p>
+        <div class="school-meta">
+          <span class="school-courses">5 Courses</span>
+          <span class="school-keywords">Drucker, Burkeman, 時間貧困</span>
+        </div>
+      </div>
+      <div class="card reveal-child">
+        <div class="school-code">SCHOOL 2</div>
+        <h3 class="school-name">Science of Time</h3>
+        <p class="school-desc">注意・集中・認知科学。なぜ中断が危険なのかを神経科学のエビデンスで解明する。</p>
+        <div class="school-meta">
+          <span class="school-courses">5 Courses</span>
+          <span class="school-keywords">注意残余, フロー状態, クロノタイプ</span>
+        </div>
+      </div>
+      <div class="card reveal-child">
+        <div class="school-code">SCHOOL 3</div>
+        <h3 class="school-name">Time Management</h3>
+        <p class="school-desc">個人の時間管理から組織の時間設計へ。158研究のメタ分析と週4日制の実証データ。</p>
+        <div class="school-meta">
+          <span class="school-courses">6 Courses</span>
+          <span class="school-keywords">GTD, Pomodoro, 週4日制</span>
+        </div>
+      </div>
+      <div class="card reveal-child">
+        <div class="school-code">SCHOOL 4</div>
+        <h3 class="school-name">Time Engineering</h3>
+        <p class="school-desc">計測・データ・改善サイクル。「計測なき改善なし」を体感するハンズオンラボ。</p>
+        <div class="school-meta">
+          <span class="school-courses">5 Courses</span>
+          <span class="school-keywords">TimeCrowd, データリテラシー</span>
+        </div>
+      </div>
+      <div class="card reveal-child">
+        <div class="school-code">SCHOOL 5</div>
+        <h3 class="school-name">Future of Time</h3>
+        <p class="school-desc">AI時代の時間再配分。浮いた時間はどこへ消えるか。「節約」と「設計」の違い。</p>
+        <div class="school-meta">
+          <span class="school-courses">5 Courses</span>
+          <span class="school-keywords">AI生産性, 批判的思考, 仕事の膨張</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 5: Evidence
+     ============================================ -->
+<section class="evidence" id="evidence">
+  <div class="container">
+    <p class="overline reveal">BY THE NUMBERS</p>
+    <div class="evidence-grid">
+      <div class="evidence-stat reveal-child">
+        <div class="number">5</div>
+        <div class="stat-label">Schools</div>
+      </div>
+      <div class="evidence-stat reveal-child">
+        <div class="number">26</div>
+        <div class="stat-label">Courses</div>
+      </div>
+      <div class="evidence-stat reveal-child">
+        <div class="number">31<span class="number-suffix">+</span></div>
+        <div class="stat-label">Academic Sources</div>
+      </div>
+      <div class="evidence-stat reveal-child">
+        <div class="number">8</div>
+        <div class="stat-label">University Partners</div>
+        <div class="stat-note">( 予定 )</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 6: Faculty
+     ============================================ -->
+<section class="faculty section" id="faculty">
+  <div class="container">
+    <p class="overline reveal">FACULTY</p>
+    <h1 class="reveal">Academic Partners（予定）</h1>
+    <p class="faculty-note reveal">※ 現在、各先生方へアプローチ中です。正式な参画が確定次第、更新いたします。</p>
+    <div class="faculty-grid">
+      <div class="faculty-card reveal-child">
+        <div class="faculty-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="faculty-name">一川 誠</div>
+        <div class="faculty-affiliation">千葉大学 教授</div>
+        <div class="faculty-field">日本時間学会 会長</div>
+      </div>
+      <div class="faculty-card reveal-child">
+        <div class="faculty-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="faculty-name">井坂 康志</div>
+        <div class="faculty-affiliation">ものつくり大学 教授</div>
+        <div class="faculty-field">ドラッカー学会 共同代表</div>
+      </div>
+      <div class="faculty-card reveal-child">
+        <div class="faculty-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="faculty-name">河原 純一郎</div>
+        <div class="faculty-affiliation">北海道大学 教授</div>
+        <div class="faculty-field">認知心理学</div>
+      </div>
+      <div class="faculty-card reveal-child">
+        <div class="faculty-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="faculty-name">島津 明人</div>
+        <div class="faculty-affiliation">慶應義塾大学 教授</div>
+        <div class="faculty-field">ワーク・エンゲイジメント</div>
+      </div>
+      <div class="faculty-card reveal-child">
+        <div class="faculty-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="faculty-name">大湾 秀雄</div>
+        <div class="faculty-affiliation">早稲田大学 教授</div>
+        <div class="faculty-field">ピープルアナリティクス</div>
+      </div>
+      <div class="faculty-card reveal-child">
+        <div class="faculty-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="faculty-name">森川 正之</div>
+        <div class="faculty-affiliation">一橋大学 特任教授</div>
+        <div class="faculty-field">RIETI</div>
+      </div>
+      <div class="faculty-card reveal-child">
+        <div class="faculty-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="faculty-name">伊達 洋駆</div>
+        <div class="faculty-affiliation">ビジネスリサーチラボ</div>
+        <div class="faculty-field">東京大学</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 7: Member Benefits
+     ============================================ -->
+<section class="benefits section" id="benefits">
+  <div class="container">
+    <p class="overline reveal">MEMBERSHIP</p>
+    <h1 class="reveal">すべて無料</h1>
+    <div class="benefits-grid">
+      <!-- Book icon -->
+      <div class="benefit-card reveal-child">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <div class="benefit-title">全コンテンツ無料アクセス</div>
+        <div class="benefit-desc">5 Schools, 26 Coursesのすべて</div>
+      </div>
+      <!-- Mail icon -->
+      <div class="benefit-card reveal-child">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="benefit-title">Weekly Digest</div>
+        <div class="benefit-desc">毎週月曜に届く、今週の推奨コンテンツ</div>
+      </div>
+      <!-- Mic icon -->
+      <div class="benefit-card reveal-child">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <div class="benefit-title">月1回ライブ講義</div>
+        <div class="benefit-desc">ゲスト講師によるオンライン講義。アーカイブ視聴可</div>
+      </div>
+      <!-- Headphones icon -->
+      <div class="benefit-card reveal-child">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        </div>
+        <div class="benefit-title">Podcast</div>
+        <div class="benefit-desc">AI生成の音声コンテンツで、移動中にも学べる</div>
+      </div>
+      <!-- Users icon -->
+      <div class="benefit-card reveal-child">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="benefit-title">コミュニティ</div>
+        <div class="benefit-desc">会員同士の知見共有と議論の場</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 8: Registration Form
+     ============================================ -->
+<section class="registration section" id="registration">
+  <div class="container" style="text-align: center;">
+    <p class="overline reveal">JOIN US</p>
+    <h1 class="reveal">会員登録</h1>
+    <p class="registration-sub reveal">1分で完了。クレジットカード不要。</p>
+    <div class="form-wrapper reveal">
+      <form id="registration-form" action="#" method="post">
+        <div class="form-group">
+          <label for="email">メールアドレス<span class="required">必須</span></label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="name">氏名<span class="required">必須</span></label>
+          <input type="text" id="name" name="name" class="form-input" placeholder="山田 太郎" required>
+        </div>
+        <div class="form-group">
+          <label for="company">所属企業<span class="optional">任意</span></label>
+          <input type="text" id="company" name="company" class="form-input" placeholder="株式会社サンプル">
+        </div>
+        <div class="form-group">
+          <label for="title">役職<span class="optional">任意</span></label>
+          <input type="text" id="title" name="title" class="form-input" placeholder="マネージャー">
+        </div>
+        <button type="submit" class="btn-cta form-submit">無料で登録する</button>
+        <p class="form-note">※ いつでも解除できます</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 9: Closing Quote
+     ============================================ -->
+<section class="closing" id="closing">
+  <div class="container">
+    <blockquote class="reveal">削減された時間を何に使うかは、<br>使う人間が決める。</blockquote>
+  </div>
+</section>
+
+<!-- ============================================
+     Section 10: Footer
+     ============================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-brand">Time University</div>
+    <div class="footer-powered">Powered by TimeCrowd | タイムクラウド株式会社</div>
+    <div class="footer-tagline">The Science, Practice, and Philosophy of Time</div>
+  </div>
+</footer>
+
+<!-- ============================================
+     JavaScript
+     ============================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // ------------------------------------------
+  // Intersection Observer for scroll reveal
+  // ------------------------------------------
+  var revealElements = document.querySelectorAll('.reveal');
+  var revealChildElements = document.querySelectorAll('.reveal-child');
+
+  var observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  // Observer for main section elements
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  revealElements.forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+  // Observer for staggered children
+  var childObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        // Find siblings that are also reveal-child within the same parent
+        var parent = entry.target.parentElement;
+        var siblings = parent.querySelectorAll('.reveal-child');
+        siblings.forEach(function(sibling, index) {
+          setTimeout(function() {
+            sibling.classList.add('visible');
+          }, index * 100); // 0.1s stagger delay
+        });
+        // Unobserve all siblings since we triggered the group
+        siblings.forEach(function(sibling) {
+          childObserver.unobserve(sibling);
+        });
+      }
+    });
+  }, observerOptions);
+
+  revealChildElements.forEach(function(el) {
+    childObserver.observe(el);
+  });
+
+  // ------------------------------------------
+  // Smooth scroll for CTA
+  // ------------------------------------------
+  var ctaLinks = document.querySelectorAll('a[href^="#"]');
+  ctaLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      var target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ------------------------------------------
+  // Form submission (dummy)
+  // ------------------------------------------
+  var form = document.getElementById('registration-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = document.getElementById('email').value;
+      var name = document.getElementById('name').value;
+      alert('ご登録ありがとうございます。\n\n' + name + ' 様（' + email + '）の会員登録を受け付けました。');
+      form.reset();
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>
