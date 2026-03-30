@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ドラッカーから学ぶ タイムマネジメントの実践ワークショップ（全3回）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #4ECDC4;
+    --primary-dark: #26A69A;
+    --accent: #FF7043;
+    --accent-dark: #E64A19;
+    --bg: #F5F5F5;
+    --text: #333333;
+    --text-light: #6C757D;
+    --white: #FFFFFF;
+    --dark: #0D1117;
+    --dark-surface: #161B22;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter','Noto Sans JP',sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    color: var(--white);
+    padding: 80px 24px 64px;
+    text-align: center;
+  }
+  .hero-label { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--primary); font-weight: 600; margin-bottom: 20px; }
+  .hero h1 { font-family: 'Playfair Display',serif; font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 700; line-height: 1.3; margin-bottom: 12px; }
+  .hero-sub { font-size: clamp(1rem,2vw,1.3rem); opacity: 0.7; margin-bottom: 32px; }
+  .hero-quote { font-family: 'Playfair Display',serif; font-style: italic; font-size: clamp(0.95rem,1.8vw,1.2rem); opacity: 0.6; max-width: 600px; margin: 0 auto 32px; line-height: 1.6; }
+  .hero-quote span { display: block; font-style: normal; font-family: 'Inter',sans-serif; font-size: 0.8em; margin-top: 8px; opacity: 0.7; }
+  .btn { display: inline-block; background: var(--accent); color: var(--white); padding: 16px 40px; border-radius: 10px; font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 14px rgba(255,112,67,0.3); border: none; cursor: pointer; }
+  .btn:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,112,67,0.4); }
+
+  /* Container */
+  .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+  /* Section */
+  .section { padding: 56px 0; }
+  .section--dark { background: var(--dark); color: var(--white); }
+  .section--white { background: var(--white); }
+  .section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+  .section h2 { font-family: 'Playfair Display',serif; font-size: clamp(1.4rem,3vw,2rem); font-weight: 700; margin-bottom: 24px; line-height: 1.3; }
+
+  /* Schedule cards */
+  .schedule { display: flex; flex-direction: column; gap: 16px; }
+  .schedule-card { background: var(--white); border-radius: 12px; padding: 24px; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .schedule-card--accent { border-left-color: var(--accent); }
+  .schedule-num { font-family: 'Playfair Display',serif; font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .schedule-card--accent .schedule-num { color: var(--accent); }
+  .schedule-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .schedule-desc { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+  .schedule-meta { font-size: 12px; color: var(--text-light); margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06); }
+
+  /* Info list */
+  .info-list { list-style: none; }
+  .info-list li { padding: 10px 0; padding-left: 20px; position: relative; font-size: 15px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+  .info-list li:last-child { border-bottom: none; }
+  .info-list li::before { content: ''; position: absolute; left: 0; top: 18px; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+
+  /* Dark list */
+  .dark-list li::before { background: var(--primary); }
+  .dark-list li { border-bottom-color: rgba(255,255,255,0.06); }
+
+  /* Drucker box */
+  .drucker-box { background: rgba(78,205,196,0.06); border-left: 3px solid var(--primary); padding: 20px 24px; border-radius: 0 10px 10px 0; margin: 24px 0; }
+  .drucker-box p { font-family: 'Playfair Display',serif; font-style: italic; font-size: 15px; line-height: 1.7; }
+  .drucker-box .attr { font-family: 'Inter',sans-serif; font-style: normal; font-size: 12px; color: var(--text-light); margin-top: 8px; }
+
+  /* Data highlight */
+  .data-row { display: flex; gap: 16px; margin: 24px 0; flex-wrap: wrap; }
+  .data-item { flex: 1; min-width: 140px; text-align: center; background: var(--dark-surface); border-radius: 10px; padding: 20px 12px; }
+  .data-num { font-family: 'Playfair Display',serif; font-size: 32px; font-weight: 700; color: var(--primary); }
+  .data-label { font-size: 12px; opacity: 0.6; margin-top: 4px; }
+
+  /* Form */
+  .form-section { background: var(--white); border-radius: 16px; padding: 40px 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); max-width: 520px; margin: 0 auto; }
+  .form-section h2 { text-align: center; }
+  .form-sub { text-align: center; font-size: 14px; color: var(--text-light); margin-bottom: 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .form-label .req { color: var(--accent); font-size: 11px; margin-left: 4px; }
+  .form-input { width: 100%; height: 48px; padding: 0 14px; border: 1.5px solid #E9ECEF; border-radius: 8px; font-size: 15px; font-family: inherit; transition: all 0.2s; background: var(--white); }
+  .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(78,205,196,0.1); }
+  .form-btn { width: 100%; height: 52px; margin-top: 8px; font-size: 16px; }
+  .form-note { text-align: center; font-size: 12px; color: var(--text-light); margin-top: 12px; }
+
+  /* Speaker */
+  .speaker { display: flex; gap: 20px; align-items: center; margin-top: 24px; }
+  .speaker-info h3 { font-size: 16px; font-weight: 600; }
+  .speaker-info p { font-size: 13px; color: var(--text-light); }
+  .speaker-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--primary-dark); display: flex; align-items: center; justify-content: center; color: var(--white); font-family: 'Playfair Display',serif; font-size: 20px; font-weight: 700; flex-shrink: 0; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--text-light); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 56px 20px 48px; }
+    .data-row { flex-direction: column; }
+    .data-item { min-width: auto; }
+    .form-section { padding: 28px 20px; }
+    .speaker { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-label">Online Workshop -- 全3回シリーズ</div>
+    <h1>ドラッカーから学ぶ<br>タイムマネジメントの<br>実践ワークショップ</h1>
+    <div class="hero-sub">学術的事実 x 現場の解釈 x TimeCrowdで実践</div>
+    <div class="hero-quote">
+      "成果をあげる者は仕事からスタートしない。時間からスタートする。"
+      <span>-- P.F. ドラッカー『経営者の条件』(1966)</span>
+    </div>
+    <a href="#form" class="btn">無料で参加申込する</a>
+  </div>
+</header>
+
+<!-- 概要 -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">ABOUT</div>
+    <h2>58年前にドラッカーが書いた答えを、<br>今、実践する。</h2>
+    <p style="font-size: 15px; color: var(--text-light); margin-bottom: 24px;">
+      1966年、ドラッカーは「時間を記録せよ。記憶ではなく記録で」と書きました。58年経った今も、大半のビジネスパーソンはこの提言を実践できていません。
+    </p>
+    <p style="font-size: 15px; color: var(--text-light); margin-bottom: 24px;">
+      本ワークショップでは、ドラッカーの時間管理思想を構造分解し、認知科学・行動経済学の最新研究で裏付けたうえで、TimeCrowdを使って「記録→整理→まとめる」の3ステップを実践します。
+    </p>
+    <div class="speaker">
+      <div class="speaker-avatar">W</div>
+      <div class="speaker-info">
+        <h3>和田 慎也</h3>
+        <p>タイムクラウド株式会社 執行役員 / CRO</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 数字 -->
+<section class="section section--dark">
+  <div class="container">
+    <div class="data-row">
+      <div class="data-item">
+        <div class="data-num">47<span style="font-size:0.5em;opacity:0.7;">秒</span></div>
+        <div class="data-label">注意持続時間<br>Gloria Mark (2023)</div>
+      </div>
+      <div class="data-item">
+        <div class="data-num">2<span style="font-size:0.5em;opacity:0.7;">倍</span></div>
+        <div class="data-label">予測と実際の乖離<br>Buehler et al. (1994)</div>
+      </div>
+      <div class="data-item">
+        <div class="data-num">1.8<span style="font-size:0.5em;opacity:0.7;">h/日</span></div>
+        <div class="data-label">自己報告のずれ<br>Guthrie et al. (2022)</div>
+      </div>
+    </div>
+    <p style="text-align: center; font-size: 14px; opacity: 0.5; margin-top: 16px;">人間の時間認知は構造的に不正確です。だからドラッカーは「記録せよ」と書きました。</p>
+  </div>
+</section>
+
+<!-- 全3回の構成 -->
+<section class="section section--white">
+  <div class="container">
+    <div class="section-label">PROGRAM</div>
+    <h2>全3回の構成</h2>
+    <p style="font-size: 14px; color: var(--text-light); margin-bottom: 24px;">ドラッカー『経営者の条件』第2章の3ステップに完全対応。各回60分、オンライン開催。</p>
+    <div class="schedule">
+      <div class="schedule-card">
+        <div class="schedule-num">第1回</div>
+        <div class="schedule-title">時間を記録する</div>
+        <div class="schedule-desc">
+          人間の時間感覚がなぜ構造的に歪むのかを、洞窟実験(Siffre 1962)・計画錯誤(Kahneman)・47秒問題(Gloria Mark)等の研究で解説。TimeCrowdで記録を始めるワークショップ。
+        </div>
+        <div class="schedule-meta">ドラッカー: 「記憶にたよった時間の報告はあてにならない」</div>
+      </div>
+      <div class="schedule-card">
+        <div class="schedule-num">第2回</div>
+        <div class="schedule-title">時間を整理する</div>
+        <div class="schedule-desc">
+          ドラッカーの診断の3つの問い -- 「しなかったならば何が起こるか」「他の人でもやれることはないか」「自分が他の人の時間を浪費していないか」。第1回で記録したデータを使い、特に会議時間を分析。
+        </div>
+        <div class="schedule-meta">ドラッカー: 「会議は組織の欠陥を補完するものである」</div>
+      </div>
+      <div class="schedule-card schedule-card--accent">
+        <div class="schedule-num">第3回</div>
+        <div class="schedule-title">時間をまとめる</div>
+        <div class="schedule-desc">
+          自由になった時間を大きなまとまりに集約する方法。TimeCrowdの予実管理機能を使い、時間の「予算」を設計する実践ワークショップ。ドラッカーの3ステップ + PDCAの第4ステップ。
+        </div>
+        <div class="schedule-meta">ドラッカー: 「細切れの時間は役に立たない」</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 各回の流れ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">FORMAT</div>
+    <h2>各回の流れ（60分）</h2>
+    <ul class="info-list">
+      <li><strong>学術的事実</strong>（20分）-- ドラッカーの原文を構造分解し、対応する最新研究で裏付ける</li>
+      <li><strong>和田の解釈</strong>（15分）-- TimeCrowdの導入現場で見えた「時間管理のリアル」を事例とともに共有</li>
+      <li><strong>ワークショップ + TimeCrowdデモ</strong>（25分）-- 参加者が手を動かすワーク + TimeCrowdの画面共有デモ</li>
+    </ul>
+    <div class="drucker-box" style="margin-top: 24px;">
+      <p>「成果をあげる者は仕事からスタートしない。時間からスタートする。計画からもスタートしない。時間が何にとられているかを明らかにすることからスタートする。」</p>
+      <div class="attr">-- P.F. ドラッカー『経営者の条件』第2章</div>
+    </div>
+  </div>
+</section>
+
+<!-- こんな方に -->
+<section class="section section--white">
+  <div class="container">
+    <div class="section-label">FOR YOU</div>
+    <h2>こんな方におすすめ</h2>
+    <ul class="info-list">
+      <li>「忙しいのに成果が出ていない」と感じている方</li>
+      <li>チームの時間の使い方を可視化・改善したいマネージャー</li>
+      <li>時間管理を感覚ではなくデータで行いたい方</li>
+      <li>ドラッカーの時間管理思想を実務に落とし込みたい方</li>
+      <li>TimeCrowdを導入済みで、より深い活用方法を知りたい方</li>
+      <li>TimeCrowdを検討中で、まず体験してみたい方</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 参照研究 -->
+<section class="section section--dark">
+  <div class="container">
+    <div class="section-label">ACADEMIC SOURCES</div>
+    <h2 style="color: var(--white);">本ワークショップで引用する主な研究</h2>
+    <ul class="info-list dark-list" style="color: rgba(255,255,255,0.8);">
+      <li>Drucker, P.F. (1966). <em>The Effective Executive</em>. Harper Business.</li>
+      <li>Gloria Mark (2023). <em>Attention Span</em>. Hanover Square Press. -- 注意持続時間47秒</li>
+      <li>Kahneman, D. & Tversky, A. (1979). Intuitive Prediction. <em>TIMS Studies</em>. -- 計画錯誤</li>
+      <li>Buehler, R. et al. (1994). <em>J. Personality and Social Psychology</em>. -- 予測27日vs実際55日</li>
+      <li>Siffre, M. (1962). 洞窟実験. -- 63日間で2週間の時間喪失</li>
+      <li>Guthrie, J.F. et al. (2022). <em>JMIR mHealth</em>. -- 1日1.3-1.8時間の自己報告のずれ</li>
+      <li>Steel, P. (2007). <em>Psychological Bulletin</em>. -- 先延ばしの691件メタ分析</li>
+      <li>一川誠 (2008). 『大人の時間はなぜ短いのか』集英社新書. -- 加齢と時間知覚</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 申込フォーム -->
+<section class="section" id="form">
+  <div class="container">
+    <div class="form-section">
+      <div class="section-label" style="text-align: center;">REGISTER</div>
+      <h2>参加申込（無料）</h2>
+      <p class="form-sub">全3回すべてに無料で参加できます</p>
+      <form action="#" onsubmit="event.preventDefault(); alert('お申込みありがとうございます。確認メールをお送りします。'); return false;">
+        <div class="form-group">
+          <label class="form-label">メールアドレス<span class="req">必須</span></label>
+          <input type="email" class="form-input" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">氏名<span class="req">必須</span></label>
+          <input type="text" class="form-input" placeholder="山田 太郎" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">会社名</label>
+          <input type="text" class="form-input" placeholder="株式会社サンプル">
+        </div>
+        <div class="form-group">
+          <label class="form-label">役職</label>
+          <input type="text" class="form-input" placeholder="マネージャー">
+        </div>
+        <div class="form-group">
+          <label class="form-label">TimeCrowdのご利用状況</label>
+          <select class="form-input" style="appearance: auto;">
+            <option value="">選択してください</option>
+            <option>利用中</option>
+            <option>過去に利用</option>
+            <option>未利用</option>
+          </select>
+        </div>
+        <button type="submit" class="btn form-btn">無料で参加申込する</button>
+        <p class="form-note">※ お申込み後、開催日時の詳細をメールでお送りします</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div style="font-family: 'Playfair Display',serif; font-size: 16px; color: var(--text); margin-bottom: 6px;">TimeCrowd</div>
+  <div>タイムクラウド株式会社</div>
+  <div style="margin-top: 4px;">timecrowd.net</div>
+</footer>
+
+</body>
+</html>
