@@ -53,6 +53,12 @@ function setupSheets() {
 // ============================================
 
 function doGet(e) {
+  // POSTデータがGETパラメータ経由で来る場合の処理
+  if (e.parameter.method === 'POST' && e.parameter.payload) {
+    const data = JSON.parse(e.parameter.payload);
+    return doPostInternal(data);
+  }
+
   const action = e.parameter.action;
   let result;
 
@@ -79,15 +85,13 @@ function doPost(e) {
   try {
     data = JSON.parse(e.postData.contents);
   } catch (err) {
-    // text/plain で送られた場合
-    try {
-      data = JSON.parse(e.postData.contents);
-    } catch (err2) {
-      return ContentService.createTextOutput(JSON.stringify({ error: 'Invalid JSON' }))
-        .setMimeType(ContentService.MimeType.JSON);
-    }
+    return ContentService.createTextOutput(JSON.stringify({ error: 'Invalid JSON' }))
+      .setMimeType(ContentService.MimeType.JSON);
   }
+  return doPostInternal(data);
+}
 
+function doPostInternal(data) {
   const action = data.action;
   let result;
 

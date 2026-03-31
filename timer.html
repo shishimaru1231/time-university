@@ -538,7 +538,7 @@
   'use strict';
 
   // ===================== CONFIG =====================
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbyT-SFQ-neJ8G068Ba6xL4tHIWFMekvLXimmQit9zG7N1VEIyWsM8LQUf_hjqfB_DplpQ/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzT396weOq6gJFIqGky3s1kK6L0opdbccAnAJnyoHLrwKIIq9xez_A4W0VFYAvehLusTQ/exec';
   const POLL_INTERVAL = 3000; // ms
 
   // ===================== STATE =====================
@@ -837,18 +837,20 @@
   }
 
   // ===================== GAS API =====================
+  // GASのWeb AppはCORS制約があるため、全てGETパラメータで送信し、
+  // リダイレクト後のJSONレスポンスを受け取る方式にする
   function postToGAS(data) {
-    return fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(data)
-    }).then(function() {
-      // no-cors means opaque response, return empty
-      return {};
-    }).catch(function(err) {
+    var url = new URL(GAS_URL);
+    url.searchParams.append('payload', JSON.stringify(data));
+    url.searchParams.append('method', 'POST');
+    return fetch(url.toString(), {
+      method: 'GET',
+      redirect: 'follow'
+    })
+    .then(function(res) { return res.json(); })
+    .catch(function(err) {
       console.error('POST error:', err);
-      throw err;
+      return {};
     });
   }
 
@@ -859,7 +861,7 @@
     });
     return fetch(url.toString(), {
       method: 'GET',
-      mode: 'cors'
+      redirect: 'follow'
     })
     .then(function(res) { return res.json(); })
     .catch(function(err) {
