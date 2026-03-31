@@ -574,6 +574,18 @@
   let participantName = '';
   let selectedWork = '60sec';
   let measureStartTime = 0;
+  const participantId = generateParticipantId();
+
+  function generateParticipantId() {
+    var chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    var id = '';
+    for (var i = 0; i < 10; i++) id += chars[Math.floor(Math.random() * chars.length)];
+    return id;
+  }
+
+  function sanitizeName(name) {
+    return name.replace(/[\/\.\$\#\[\]]/g, '').trim();
+  }
 
   // Work type -> target ms
   function targetMs(work) {
@@ -587,7 +599,8 @@
   function init() {
     const params = new URLSearchParams(window.location.search);
     isAdmin = params.get('admin') === 'true';
-    sessionId = params.get('session') || '';
+    var rawSession = params.get('session') || '';
+    sessionId = rawSession.replace(/[^a-z0-9]/gi, '').substring(0, 12);
 
     if (!sessionId) {
       sessionId = generateSessionId();
@@ -634,15 +647,16 @@
 
   window.onReady = function() {
     const nameInput = document.getElementById('input-name');
-    participantName = nameInput.value.trim();
+    participantName = sanitizeName(nameInput.value);
     if (!participantName) {
       nameInput.style.borderColor = 'var(--accent)';
       nameInput.focus();
       return;
     }
+    nameInput.style.borderColor = '';
 
-    // Register participant with Firebase
-    db.ref('sessions/' + sessionId + '/waiting/' + participantName).set({
+    // Register participant with Firebase (uniqueID as key to prevent same-name overwrite)
+    db.ref('sessions/' + sessionId + '/waiting/' + participantId).set({
       name: participantName,
       workType: selectedWork,
       registeredAt: Date.now()
@@ -663,6 +677,10 @@
       var data = snap.val();
       if (data && data.started === true && data.startTime && data.startTime > listenStarted) {
         db.ref('sessions/' + sessionId).off();
+        // 管理者が選択したworkTypeで上書き
+        if (data.workType) {
+          selectedWork = data.workType;
+        }
         measureStartTime = Date.now();
         showScreen('screen-measure');
       }
@@ -775,10 +793,10 @@
   window.onResetSession = function() {
     db.ref('sessions/' + sessionId).update({
       started: false,
-      startTime: null
+      startTime: null,
+      waiting: null,
+      results: null
     });
-    db.ref('sessions/' + sessionId + '/waiting').remove();
-    db.ref('sessions/' + sessionId + '/results').remove();
 
     // Reset UI
     document.getElementById('btn-start-all').disabled = false;

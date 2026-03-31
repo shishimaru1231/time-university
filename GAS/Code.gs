@@ -297,6 +297,7 @@ function saveAssessment(data) {
   const O = reversed[4] + reversed[9] + reversed[14] + reversed[19];
 
   // z標準化
+  // [SYNC] Norms (Donnellan 2006)。変更時は assessment-result.html の norms も同時に更新すること
   const norms = { E: {mean:11.8, sd:3.9}, A: {mean:14.9, sd:3.1}, C: {mean:13.6, sd:3.4}, N: {mean:10.5, sd:3.7}, O: {mean:14.4, sd:3.2} };
   const z_E = (E - norms.E.mean) / norms.E.sd;
   const z_A = (A - norms.A.mean) / norms.A.sd;
@@ -310,11 +311,12 @@ function saveAssessment(data) {
   const calibration = z_C;
 
   // タイプ判定
-  const threshold = 0.30;
+  // [SYNC] 閾値。変更時は assessment-result.html の THRESHOLD も同時に更新すること
+  const THRESHOLD = 0.30;
   let type;
-  if (overScore >= threshold && underScore < threshold) type = 'upper';
-  else if (overScore < threshold && underScore >= threshold) type = 'lower';
-  else if (overScore >= threshold && underScore >= threshold) type = 'extreme';
+  if (overScore >= THRESHOLD && underScore < THRESHOLD) type = 'over';
+  else if (overScore < THRESHOLD && underScore >= THRESHOLD) type = 'under';
+  else if (overScore >= THRESHOLD && underScore >= THRESHOLD) type = 'extreme';
   else type = 'mixed';
 
   // 回答IDを生成

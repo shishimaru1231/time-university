@@ -307,7 +307,7 @@
     return;
   }
 
-  // --- Norms (Donnellan et al., 2006) ---
+  // [SYNC] Norms (Donnellan 2006)。変更時は GAS/Code.gs の norms も同時に更新すること
   const norms = {
     E: { mean: 11.8, sd: 3.9 },
     A: { mean: 14.9, sd: 3.1 },
@@ -331,7 +331,7 @@
   const underScore = 0.45 * zE + 0.35 * zO + 0.20 * (-zN);
   const calibration = zC;
 
-  // --- Type ---
+  // [SYNC] 閾値。変更時は GAS/Code.gs の THRESHOLD も同時に更新すること
   const THRESHOLD = 0.30;
   let typeName, typeColor, typeShort;
   if (overScore >= THRESHOLD && underScore < THRESHOLD) {
