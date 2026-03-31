@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>時間感覚アセスメント | Time University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    min-height: 100vh;
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background: #F5F5F5;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { display: flex; flex-direction: column; align-items: center; }
+
+  .container {
+    width: 100%;
+    max-width: 540px;
+    padding: 24px 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #4ECDC4;
+    margin-bottom: 4px;
+  }
+  .header .sub {
+    font-size: 13px;
+    color: #999;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 20px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 4px;
+    background: #E0E0E0;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #4ECDC4;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* Page */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Question card */
+  .question-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .question-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4ECDC4;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .question-text {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  /* Likert scale */
+  .likert {
+    display: flex;
+    gap: 6px;
+  }
+  .likert-option {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .likert-option input { display: none; }
+  .likert-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #E0E0E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #999;
+    margin: 0 auto 4px;
+    transition: all 0.15s;
+  }
+  .likert-option input:checked + .likert-circle {
+    border-color: #4ECDC4;
+    background: #4ECDC4;
+    color: #fff;
+  }
+  .likert-label {
+    font-size: 9px;
+    color: #bbb;
+    line-height: 1.3;
+  }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary { background: #4ECDC4; color: #fff; }
+  .btn-primary:hover:not(:disabled) { background: #26A69A; }
+  .btn-outline { background: transparent; color: #26A69A; border: 2px solid #4ECDC4; }
+  .btn-accent { background: #FF7043; color: #fff; }
+
+  /* Guide */
+  .guide-box {
+    background: rgba(78,205,196,0.08);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  /* Scale legend */
+  .scale-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #bbb;
+    margin-bottom: 16px;
+    padding: 0 4px;
+  }
+
+  /* Error */
+  .error-msg {
+    color: #FF7043;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 12px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  /* Loading */
+  .loading {
+    text-align: center;
+    padding: 40px 0;
+    color: #999;
+    font-size: 14px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    font-size: 10px;
+    color: #ccc;
+    padding: 16px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>TIME PERCEPTION ASSESSMENT</h1>
+    <div class="sub">時間感覚アセスメント（20問・約3分）</div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progress-text">Page 1 / 2</span>
+      <span id="progress-count">0 / 20 回答済み</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Guide (shown on page 1 only) -->
+  <div class="guide-box" id="guide-box">
+    以下の質問に対して、自分にどの程度当てはまるかを5段階で選んでください。正解・不正解はありません。直感で回答してください。
+  </div>
+
+  <div class="scale-legend">
+    <span>1 = まったく当てはまらない</span>
+    <span>5 = 非常に当てはまる</span>
+  </div>
+
+  <!-- Page 1: Q1-Q10 -->
+  <div class="page active" id="page-1">
+
+    <div class="question-card" data-q="1">
+      <div class="question-num">Q1 / 20</div>
+      <div class="question-text">盛り上げ役である</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q1" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q1" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q1" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q1" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q1" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="2">
+      <div class="question-num">Q2 / 20</div>
+      <div class="question-text">人に共感しやすい</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q2" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q2" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q2" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q2" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q2" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="3">
+      <div class="question-num">Q3 / 20</div>
+      <div class="question-text">すぐに雑用を済ませる</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q3" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q3" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q3" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q3" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q3" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="4">
+      <div class="question-num">Q4 / 20</div>
+      <div class="question-text">気分をコロコロ変える</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q4" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q4" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q4" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q4" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q4" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="5">
+      <div class="question-num">Q5 / 20</div>
+      <div class="question-text">想像力が豊かである</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q5" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q5" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q5" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q5" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q5" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="6">
+      <div class="question-num">Q6 / 20</div>
+      <div class="question-text">おしゃべりではない</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q6" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q6" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q6" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q6" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q6" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="7">
+      <div class="question-num">Q7 / 20</div>
+      <div class="question-text">他人の問題には興味がない</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q7" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q7" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q7" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q7" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q7" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="8">
+      <div class="question-num">Q8 / 20</div>
+      <div class="question-text">整理整頓を怠りがち</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q8" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q8" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q8" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q8" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q8" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="9">
+      <div class="question-num">Q9 / 20</div>
+      <div class="question-text">いつもリラックスしていることが多い</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q9" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q9" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q9" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q9" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q9" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="10">
+      <div class="question-num">Q10 / 20</div>
+      <div class="question-text">抽象的な考えには興味がない</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q10" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q10" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q10" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q10" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q10" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="error-msg" id="error-1">全ての質問に回答してください</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goToPage2()">次へ（11〜20問）</button>
+    </div>
+  </div>
+
+  <!-- Page 2: Q11-Q20 -->
+  <div class="page" id="page-2">
+
+    <div class="question-card" data-q="11">
+      <div class="question-num">Q11 / 20</div>
+      <div class="question-text">パーティでは色々な人と話すほうだ</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q11" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q11" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q11" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q11" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q11" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="12">
+      <div class="question-num">Q12 / 20</div>
+      <div class="question-text">他の人の気持ちがわかる</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q12" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q12" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q12" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q12" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q12" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="13">
+      <div class="question-num">Q13 / 20</div>
+      <div class="question-text">整頓するのが好きである</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q13" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q13" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q13" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q13" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q13" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="14">
+      <div class="question-num">Q14 / 20</div>
+      <div class="question-text">慌てやすい</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q14" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q14" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q14" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q14" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q14" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="15">
+      <div class="question-num">Q15 / 20</div>
+      <div class="question-text">抽象的な考えを理解するのが苦手だ</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q15" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q15" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q15" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q15" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q15" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="16">
+      <div class="question-num">Q16 / 20</div>
+      <div class="question-text">引っ込み思案である</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q16" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q16" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q16" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q16" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q16" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="17">
+      <div class="question-num">Q17 / 20</div>
+      <div class="question-text">他人にはまったく興味がない</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q17" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q17" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q17" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q17" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q17" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="18">
+      <div class="question-num">Q18 / 20</div>
+      <div class="question-text">無茶なことをする</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q18" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q18" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q18" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q18" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q18" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="19">
+      <div class="question-num">Q19 / 20</div>
+      <div class="question-text">落ち込むことはめったにない</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q19" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q19" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q19" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q19" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q19" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="20">
+      <div class="question-num">Q20 / 20</div>
+      <div class="question-text">アイディアが乏しいほうだ</div>
+      <div class="likert">
+        <label class="likert-option"><input type="radio" name="q20" value="1"><div class="likert-circle">1</div><div class="likert-label">全く</div></label>
+        <label class="likert-option"><input type="radio" name="q20" value="2"><div class="likert-circle">2</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q20" value="3"><div class="likert-circle">3</div><div class="likert-label">どちらとも</div></label>
+        <label class="likert-option"><input type="radio" name="q20" value="4"><div class="likert-circle">4</div><div class="likert-label"></div></label>
+        <label class="likert-option"><input type="radio" name="q20" value="5"><div class="likert-circle">5</div><div class="likert-label">非常に</div></label>
+      </div>
+    </div>
+
+    <div class="error-msg" id="error-2">全ての質問に回答してください</div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goToPage1()">戻る</button>
+      <button class="btn btn-accent" id="btn-submit" onclick="submitAssessment()">結果を見る</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="page" id="page-loading">
+    <div class="loading">結果を計算しています...</div>
+  </div>
+
+  <div class="footer">
+    mini-IPIP (Donnellan et al., 2006) -- IPIP Public Domain<br>
+    Powered by TimeCrowd
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // [SYNC] Norms (Donnellan 2006)。変更時は assessment-result.html, GAS/Code.gs も同時に更新すること
+  var norms = {
+    E: { mean: 11.8, sd: 3.9 },
+    A: { mean: 14.9, sd: 3.1 },
+    C: { mean: 13.6, sd: 3.4 },
+    N: { mean: 10.5, sd: 3.7 },
+    O: { mean: 14.4, sd: 3.2 }
+  };
+
+  // [SYNC] 閾値。変更時は assessment-result.html, GAS/Code.gs も同時に更新すること
+  var THRESHOLD = 0.30;
+
+  // Reverse items: 6,7,8,9,10,15,16,17,18,19,20
+  var reverseItems = [6,7,8,9,10,15,16,17,18,19,20];
+
+  // Factor -> item indices (1-based)
+  // E: 1, 6R, 11, 16R
+  // A: 2, 7R, 12, 17R
+  // C: 3, 8R, 13, 18R
+  // N: 4, 9R, 14, 19R
+  // O: 5, 10R, 15R, 20R
+
+  // Progress update
+  function updateProgress() {
+    var answered = 0;
+    for (var i = 1; i <= 20; i++) {
+      var checked = document.querySelector('input[name="q' + i + '"]:checked');
+      if (checked) answered++;
+    }
+    document.getElementById('progress-count').textContent = answered + ' / 20 回答済み';
+    document.getElementById('progress-fill').style.width = (answered / 20 * 100) + '%';
+  }
+
+  // Attach change listeners to all radio buttons
+  document.querySelectorAll('input[type="radio"]').forEach(function(r) {
+    r.addEventListener('change', updateProgress);
+  });
+
+  function validatePage(start, end) {
+    for (var i = start; i <= end; i++) {
+      var checked = document.querySelector('input[name="q' + i + '"]:checked');
+      if (!checked) return false;
+    }
+    return true;
+  }
+
+  window.goToPage2 = function() {
+    if (!validatePage(1, 10)) {
+      document.getElementById('error-1').classList.add('show');
+      return;
+    }
+    document.getElementById('error-1').classList.remove('show');
+    document.getElementById('page-1').classList.remove('active');
+    document.getElementById('page-2').classList.add('active');
+    document.getElementById('progress-text').textContent = 'Page 2 / 2';
+    document.getElementById('guide-box').style.display = 'none';
+    window.scrollTo(0, 0);
+  };
+
+  window.goToPage1 = function() {
+    document.getElementById('page-2').classList.remove('active');
+    document.getElementById('page-1').classList.add('active');
+    document.getElementById('progress-text').textContent = 'Page 1 / 2';
+    document.getElementById('guide-box').style.display = '';
+    window.scrollTo(0, 0);
+  };
+
+  window.submitAssessment = function() {
+    if (!validatePage(11, 20)) {
+      document.getElementById('error-2').classList.add('show');
+      return;
+    }
+    document.getElementById('error-2').classList.remove('show');
+
+    var btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = '計算中...';
+
+    // Collect answers
+    var answers = [];
+    for (var i = 1; i <= 20; i++) {
+      var val = parseInt(document.querySelector('input[name="q' + i + '"]:checked').value, 10);
+      answers.push(val);
+    }
+
+    // Reverse scoring
+    var reversed = answers.map(function(v, idx) {
+      var itemNum = idx + 1;
+      return reverseItems.indexOf(itemNum) !== -1 ? (6 - v) : v;
+    });
+
+    // Calculate Big Five scores
+    var E = reversed[0] + reversed[5] + reversed[10] + reversed[15];
+    var A = reversed[1] + reversed[6] + reversed[11] + reversed[16];
+    var C = reversed[2] + reversed[7] + reversed[12] + reversed[17];
+    var N = reversed[3] + reversed[8] + reversed[13] + reversed[18];
+    var O = reversed[4] + reversed[9] + reversed[14] + reversed[19];
+
+    // Show loading briefly then redirect
+    document.getElementById('page-2').classList.remove('active');
+    document.getElementById('page-loading').classList.add('active');
+
+    setTimeout(function() {
+      var resultUrl = 'assessment-result.html?e=' + E + '&a=' + A + '&c=' + C + '&n=' + N + '&o=' + O;
+      window.location.href = resultUrl;
+    }, 800);
+  };
+
+})();
+</script>
+</body>
+</html>
