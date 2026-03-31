@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>時間感覚プロファイル | Time University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Noto Sans JP', 'Inter', sans-serif;
+    background: #F5F5F5;
+    color: #333;
+  }
+
+  .page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 24px 8px;
+  }
+
+  /* --- Header --- */
+  .header {
+    text-align: center;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+  .header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #4ECDC4;
+    letter-spacing: 0.05em;
+  }
+  .header .sub {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+  }
+
+  /* --- Top Row: 2 columns --- */
+  .top-row {
+    display: flex;
+    gap: 20px;
+    flex-shrink: 0;
+    margin-bottom: 12px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  /* Left: Type */
+  .type-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .type-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #999;
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .type-name {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .type-desc {
+    font-size: 12px;
+    color: #666;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* Right: Bars */
+  .bars-card {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+  }
+  .bar-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  .balance-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #999;
+    margin-bottom: 2px;
+  }
+  .bar-track {
+    position: relative;
+    height: 14px;
+    background: linear-gradient(to right, #FF7043 0%, #F5F5F5 50%, #4ECDC4 100%);
+    border-radius: 7px;
+    overflow: visible;
+  }
+  .bar-track .center-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #ccc;
+  }
+  .bar-marker {
+    position: absolute;
+    top: -3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #333;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  /* Calibration bar */
+  .cal-track {
+    position: relative;
+    height: 14px;
+    background: #eee;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  .cal-fill {
+    height: 100%;
+    border-radius: 7px;
+    transition: width 0.5s ease;
+  }
+  .cal-label {
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* --- Middle Row: Radar --- */
+  .mid-row {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .radar-card {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #radarCanvas {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* --- Bottom Row: Explanation --- */
+  .bottom-row {
+    flex-shrink: 0;
+    margin-bottom: 6px;
+  }
+  .explanation-card {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+  }
+  .explanation-left {
+    flex: 1.2;
+  }
+  .explanation-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .section-heading {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4ECDC4;
+    margin-bottom: 4px;
+    letter-spacing: 0.03em;
+  }
+  .explanation-text {
+    font-size: 12px;
+    line-height: 1.7;
+    color: #444;
+  }
+  .advice-text {
+    font-size: 12px;
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 8px;
+  }
+  .quote {
+    font-size: 12px;
+    font-style: italic;
+    color: #888;
+    border-left: 3px solid #4ECDC4;
+    padding-left: 10px;
+    line-height: 1.6;
+  }
+  .quote-author {
+    font-style: normal;
+    font-size: 11px;
+    color: #aaa;
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* --- Footer --- */
+  .footer {
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 10px;
+    color: #bbb;
+    padding: 4px 0 8px;
+  }
+
+  /* --- Error state --- */
+  .error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+  }
+  .error-page h2 {
+    font-size: 20px;
+    color: #FF7043;
+    margin-bottom: 8px;
+  }
+  .error-page p {
+    color: #666;
+    font-size: 14px;
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 768px) {
+    .page { padding: 10px 12px 6px; }
+    .top-row { flex-direction: column; gap: 10px; }
+    .type-name { font-size: 26px; }
+    .explanation-card { flex-direction: column; gap: 10px; }
+    .header h1 { font-size: 15px; }
+  }
+
+  @media (max-height: 700px) {
+    .page { padding: 8px 16px 4px; }
+    .header { margin-bottom: 6px; }
+    .header h1 { font-size: 15px; }
+    .top-row { margin-bottom: 8px; gap: 12px; }
+    .card { padding: 10px 14px; }
+    .type-name { font-size: 26px; }
+    .mid-row { margin-bottom: 6px; }
+    .bottom-row { margin-bottom: 4px; }
+    .explanation-text, .advice-text { font-size: 11px; line-height: 1.6; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+(function() {
+
+  // --- Parse URL params ---
+  const params = new URLSearchParams(window.location.search);
+  const rawE = parseInt(params.get('e'), 10);
+  const rawA = parseInt(params.get('a'), 10);
+  const rawC = parseInt(params.get('c'), 10);
+  const rawN = parseInt(params.get('n'), 10);
+  const rawO = parseInt(params.get('o'), 10);
+
+  function isValid(v) { return !isNaN(v) && v >= 4 && v <= 20; }
+
+  if (!isValid(rawE) || !isValid(rawA) || !isValid(rawC) || !isValid(rawN) || !isValid(rawO)) {
+    document.getElementById('app').innerHTML =
+      '<div class="error-page"><div>' +
+      '<h2>パラメータエラー</h2>' +
+      '<p>URLパラメータ e, a, c, n, o (各4-20の整数) が必要です。</p>' +
+      '<p style="margin-top:8px;font-size:12px;color:#999;">例: assessment-result.html?e=14&a=16&c=12&n=15&o=13</p>' +
+      '</div></div>';
+    return;
+  }
+
+  // --- Norms (Donnellan et al., 2006) ---
+  const norms = {
+    E: { mean: 11.8, sd: 3.9 },
+    A: { mean: 14.9, sd: 3.1 },
+    C: { mean: 13.6, sd: 3.4 },
+    N: { mean: 10.5, sd: 3.7 },
+    O: { mean: 14.4, sd: 3.2 }
+  };
+
+  function zScore(raw, factor) {
+    return (raw - norms[factor].mean) / norms[factor].sd;
+  }
+
+  const zE = zScore(rawE, 'E');
+  const zA = zScore(rawA, 'A');
+  const zC = zScore(rawC, 'C');
+  const zN = zScore(rawN, 'N');
+  const zO = zScore(rawO, 'O');
+
+  // --- Scores ---
+  const overScore  = 0.50 * zN + 0.30 * (-zC) + 0.20 * (-zE);
+  const underScore = 0.45 * zE + 0.35 * zO + 0.20 * (-zN);
+  const calibration = zC;
+
+  // --- Type ---
+  const THRESHOLD = 0.30;
+  let typeName, typeColor, typeShort;
+  if (overScore >= THRESHOLD && underScore < THRESHOLD) {
+    typeName = '上振れ型'; typeColor = '#FF7043'; typeShort = 'over';
+  } else if (overScore < THRESHOLD && underScore >= THRESHOLD) {
+    typeName = '下振れ型'; typeColor = '#4ECDC4'; typeShort = 'under';
+  } else if (overScore >= THRESHOLD && underScore >= THRESHOLD) {
+    typeName = '極端型'; typeColor = '#7E57C2'; typeShort = 'extreme';
+  } else {
+    typeName = '混合型'; typeColor = '#6C757D'; typeShort = 'mixed';
+  }
+
+  // --- Type descriptions ---
+  const typeDescShort = {
+    over: '時間を実際より長く感じやすい傾向',
+    under: '時間を実際より短く感じやすい傾向',
+    mixed: '状況によって時間感覚が変動する傾向',
+    extreme: '時間感覚の振れ幅が大きい傾向'
+  };
+
+  const typeExplanation = {
+    over: 'あなたは時間を実際より長く感じる傾向があります。会議や待ち時間を実際以上に長く感じ、「もうこんなに時間が経った」と思いがちです。神経症傾向の高さが内的時計を加速させています。',
+    under: 'あなたは時間を実際より短く感じる傾向があります。集中すると時間が消え、「まだ30分しか経っていない」と思ったら1時間経過していることも。外向性や開放性の高さがフロー状態を促進しています。',
+    mixed: 'あなたは状況によって時間感覚が上下にぶれるタイプです。最も一般的なパターンで、ストレス下では上振れ、集中時には下振れする傾向があります。',
+    extreme: 'あなたは時間感覚の振れ幅が大きいタイプです。集中時は時間が消え、中断や待機時は非常に長く感じます。データなしでは自分の時間認知を信用できません。'
+  };
+
+  const typeAdvice = {
+    over: '予定より早く終わっても次のタスクに飛びつかず、振り返りの時間を取ってください。TimeCrowdの記録データで「実際はどうだったか」を毎日確認することで、感覚が補正されていきます。',
+    under: 'タイマーやアラートを活用して、時間の経過を外部から知らせる仕組みを作ってください。締切管理に特に注意が必要です。',
+    mixed: '環境や感情に左右されやすいため、リアルタイムの記録が特に重要です。データで自分のパターンを把握してください。',
+    extreme: '記録なしでの時間管理は危険です。TimeCrowdのような外部の計測ツールを常に使い、主観と客観のずれを継続的にモニタリングしてください。'
+  };
+
+  // --- Calibration label ---
+  let calLabel, calColor, calPct;
+  if (calibration >= 1.0) {
+    calLabel = '高い -- 歪みがあっても自力で補正できる可能性が高い';
+    calColor = '#4ECDC4';
+    calPct = Math.min(100, 50 + calibration * 25);
+  } else if (calibration >= -0.5) {
+    calLabel = '標準 -- ツールによる補助が有効';
+    calColor = '#6C757D';
+    calPct = Math.min(100, 50 + calibration * 25);
+  } else {
+    calLabel = '要サポート -- 構造化された仕組みが必要';
+    calColor = '#FF7043';
+    calPct = Math.max(5, 50 + calibration * 25);
+  }
+
+  // --- Balance bar position (map net bias to 0-100) ---
+  // Positive net = more over, Negative net = more under
+  // Scale: clamp from -2 to +2 mapped to 0%-100% (left=over, right=under)
+  const netBias = overScore - underScore;
+  const balancePos = Math.max(0, Math.min(100, 50 + netBias * 20));
+
+  // --- Build HTML ---
+  document.getElementById('app').innerHTML = `
+    <div class="page">
+      <div class="header">
+        <h1>TIME PERCEPTION PROFILE</h1>
+        <div class="sub">ビッグファイブに基づく時間感覚プロファイル</div>
+      </div>
+
+      <div class="top-row">
+        <div class="card type-card">
+          <div class="type-label">YOUR TYPE</div>
+          <div class="type-name" style="color:${typeColor}">${typeName}</div>
+          <div class="type-desc">${typeDescShort[typeShort]}</div>
+        </div>
+        <div class="card bars-card">
+          <div>
+            <div class="bar-section-title">上振れ / 下振れ バランス</div>
+            <div class="balance-labels">
+              <span>上振れ (${overScore.toFixed(2)})</span>
+              <span>0</span>
+              <span>下振れ (${underScore.toFixed(2)})</span>
+            </div>
+            <div class="bar-track">
+              <div class="center-line"></div>
+              <div class="bar-marker" style="left:${balancePos}%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="bar-section-title">時間管理補正力 (誠実性)</div>
+            <div class="cal-track">
+              <div class="cal-fill" style="width:${calPct}%;background:${calColor}"></div>
+            </div>
+            <div class="cal-label" style="color:${calColor}">${calLabel}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mid-row">
+        <div class="card radar-card">
+          <canvas id="radarCanvas"></canvas>
+        </div>
+      </div>
+
+      <div class="bottom-row">
+        <div class="card explanation-card">
+          <div class="explanation-left">
+            <div class="section-heading">タイプ解説</div>
+            <div class="explanation-text">${typeExplanation[typeShort]}</div>
+            <div class="section-heading" style="margin-top:8px;">実践アドバイス</div>
+            <div class="advice-text">${typeAdvice[typeShort]}</div>
+          </div>
+          <div class="explanation-right">
+            <div class="quote">
+              「記憶にたよった時間の報告はあてにならない。」
+              <span class="quote-author">-- P.F. ドラッカー</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">Powered by TimeCrowd</div>
+    </div>
+  `;
+
+  // --- Draw Radar Chart ---
+  const canvas = document.getElementById('radarCanvas');
+  const container = canvas.parentElement;
+
+  function drawRadar() {
+    const rect = container.getBoundingClientRect();
+    const size = Math.min(rect.width, rect.height) - 16;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const cx = size / 2;
+    const cy = size / 2;
+    const radius = size * 0.36;
+
+    const factors = [
+      { label: '外向性', raw: rawE, z: zE },
+      { label: '調和性', raw: rawA, z: zA },
+      { label: '誠実性', raw: rawC, z: zC },
+      { label: '神経症傾向', raw: rawN, z: zN },
+      { label: '開放性', raw: rawO, z: zO }
+    ];
+
+    const n = factors.length;
+    const angleStep = (2 * Math.PI) / n;
+    const startAngle = -Math.PI / 2;
+
+    function getPoint(i, r) {
+      const angle = startAngle + i * angleStep;
+      return {
+        x: cx + r * Math.cos(angle),
+        y: cy + r * Math.sin(angle)
+      };
+    }
+
+    // Grid
+    const levels = 4;
+    for (let lv = 1; lv <= levels; lv++) {
+      const r = (radius / levels) * lv;
+      ctx.beginPath();
+      for (let i = 0; i <= n; i++) {
+        const p = getPoint(i % n, r);
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Axes
+    for (let i = 0; i < n; i++) {
+      const p = getPoint(i, radius);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(p.x, p.y);
+      ctx.strokeStyle = '#ddd';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Data polygon
+    // Map raw scores (4-20) to 0-1 range
+    const values = factors.map(f => (f.raw - 4) / 16);
+
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const p = getPoint(i, radius * values[i]);
+      if (i === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(78, 205, 196, 0.25)';
+    ctx.fill();
+    ctx.strokeStyle = '#4ECDC4';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Data points
+    for (let i = 0; i < n; i++) {
+      const p = getPoint(i, radius * values[i]);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = '#4ECDC4';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    // Labels
+    ctx.font = '500 12px "Noto Sans JP", sans-serif';
+    ctx.fillStyle = '#555';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    const labelOffset = 22;
+    for (let i = 0; i < n; i++) {
+      const p = getPoint(i, radius + labelOffset);
+      const angle = startAngle + i * angleStep;
+
+      let textAlign = 'center';
+      if (Math.cos(angle) > 0.3) textAlign = 'left';
+      else if (Math.cos(angle) < -0.3) textAlign = 'right';
+
+      ctx.textAlign = textAlign;
+      ctx.fillStyle = '#555';
+      ctx.fillText(factors[i].label, p.x, p.y - 7);
+
+      ctx.font = '600 11px "Inter", "Noto Sans JP", sans-serif';
+      ctx.fillStyle = '#4ECDC4';
+      ctx.fillText(factors[i].raw.toString(), p.x, p.y + 8);
+      ctx.font = '500 12px "Noto Sans JP", sans-serif';
+    }
+  }
+
+  drawRadar();
+  window.addEventListener('resize', drawRadar);
+
+})();
+</script>
+</body>
+</html>

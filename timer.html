@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>時間感覚ワーク</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #4ECDC4;
+    --primary-dark: #26A69A;
+    --accent: #FF7043;
+    --bg: #F5F5F5;
+    --text: #333333;
+    --white: #FFFFFF;
+    --gray-light: #E0E0E0;
+    --gray-mid: #9E9E9E;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --radius: 16px;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100dvh;
+  }
+
+  /* ---------- Shared ---------- */
+  .screen { display: none; width: 100%; max-width: 480px; padding: 24px 20px; flex: 1; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: var(--gray-mid);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--gray-light);
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    outline: none;
+    background: var(--white);
+  }
+  input[type="text"]:focus {
+    border-color: var(--primary);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary { background: var(--primary); color: var(--white); }
+  .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+  .btn-accent { background: var(--accent); color: var(--white); }
+  .btn-outline {
+    background: transparent;
+    color: var(--primary-dark);
+    border: 2px solid var(--primary);
+  }
+
+  .work-options {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .work-option {
+    flex: 1;
+    padding: 16px 12px;
+    border: 2px solid var(--gray-light);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--white);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .work-option.selected {
+    border-color: var(--primary);
+    background: rgba(78, 205, 196, 0.08);
+  }
+  .work-option .wo-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .work-option .wo-desc {
+    font-size: 12px;
+    color: var(--gray-mid);
+  }
+
+  .spacer { flex: 1; }
+
+  /* ---------- Waiting ---------- */
+  #screen-wait {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .pulse-ring {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 4px solid var(--primary);
+    animation: pulse 1.8s ease-in-out infinite;
+    margin-bottom: 24px;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.5; }
+  }
+  #screen-wait .wait-msg {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  #screen-wait .wait-sub {
+    font-size: 13px;
+    color: var(--gray-mid);
+  }
+
+  /* ---------- Measuring (white screen) ---------- */
+  #screen-measure {
+    position: fixed;
+    inset: 0;
+    max-width: none;
+    padding: 0;
+    background: var(--white);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  #btn-stop {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    box-shadow: 0 8px 32px rgba(255, 112, 67, 0.35);
+  }
+  #btn-stop:active {
+    transform: scale(0.93);
+  }
+
+  /* ---------- Result ---------- */
+  #screen-result {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .result-elapsed {
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .result-unit {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gray-mid);
+    margin-bottom: 16px;
+  }
+  .result-diff {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .result-diff.good { color: var(--primary-dark); }
+  .result-diff.bad { color: var(--accent); }
+  .result-target {
+    font-size: 14px;
+    color: var(--gray-mid);
+    margin-bottom: 40px;
+  }
+
+  /* ---------- Admin ---------- */
+  .admin-header {
+    background: var(--primary);
+    color: var(--white);
+    padding: 12px 20px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    width: 100%;
+  }
+  #screen-admin { max-width: 720px; }
+  .admin-section {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .admin-section h2 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .admin-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 28px;
+  }
+  .admin-work-select {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .admin-work-btn {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--gray-light);
+    border-radius: 10px;
+    background: var(--white);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .admin-work-btn.selected {
+    border-color: var(--primary);
+    background: rgba(78,205,196,0.08);
+  }
+  #btn-start-all {
+    width: 100%;
+    padding: 18px;
+    font-size: 18px;
+  }
+
+  .session-url-box {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    word-break: break-all;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .session-url-box .url-text { flex: 1; }
+  .btn-copy {
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  /* Dashboard */
+  .dash-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .stat-card .stat-val {
+    font-size: 24px;
+    font-weight: 900;
+  }
+  .stat-card .stat-label {
+    font-size: 11px;
+    color: var(--gray-mid);
+    margin-top: 2px;
+  }
+
+  .result-list { list-style: none; }
+  .result-list li {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-light);
+    animation: slideIn 0.3s ease-out;
+  }
+  .result-list li:last-child { border-bottom: none; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .rl-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .rl-rank.top { background: var(--primary); color: var(--white); }
+  .rl-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .rl-time {
+    font-size: 16px;
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  .rl-diff {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 56px;
+    text-align: right;
+  }
+  .rl-diff.good { color: var(--primary-dark); }
+  .rl-diff.bad { color: var(--accent); }
+
+  .empty-state {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--gray-mid);
+    font-size: 14px;
+  }
+
+  /* ---------- Session display on entry ---------- */
+  .session-info {
+    text-align: center;
+    font-size: 12px;
+    color: var(--gray-mid);
+    margin-bottom: 16px;
+  }
+  .session-info strong {
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ---------- Admin: waiting participants list ---------- */
+  .waiting-list {
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .waiting-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 14px;
+  }
+  .waiting-list li:last-child { border-bottom: none; }
+
+  /* ---------- Reset button ---------- */
+  .btn-reset-wrap {
+    margin-top: 16px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== PARTICIPANT SCREENS ========== -->
+
+<!-- 1. Entry -->
+<div id="screen-entry" class="screen active">
+  <div class="spacer"></div>
+  <h1>時間感覚ワーク</h1>
+  <p class="subtitle">体内時計の正確さを測ってみよう</p>
+
+  <div class="session-info" id="session-display">
+    Session: <strong id="session-id-text">---</strong>
+  </div>
+
+  <label for="input-name">名前</label>
+  <input type="text" id="input-name" placeholder="例: 山田太郎" autocomplete="off">
+
+  <div style="height: 20px;"></div>
+
+  <label>ワークを選択</label>
+  <div class="work-options">
+    <div class="work-option selected" data-work="60sec" onclick="selectWork(this)">
+      <div class="wo-title">60秒</div>
+      <div class="wo-desc">1分を数える</div>
+    </div>
+    <div class="work-option" data-work="120count" onclick="selectWork(this)">
+      <div class="wo-title">120カウント</div>
+      <div class="wo-desc">120を数える</div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" id="btn-ready" onclick="onReady()">準備OK</button>
+  <div class="spacer"></div>
+</div>
+
+<!-- 2. Waiting -->
+<div id="screen-wait" class="screen">
+  <div class="pulse-ring"></div>
+  <div class="wait-msg">管理者のスタートを待っています...</div>
+  <div class="wait-sub" id="wait-work-label">60秒ワーク</div>
+</div>
+
+<!-- 3. Measuring -->
+<div id="screen-measure" class="screen">
+  <button class="btn btn-accent" id="btn-stop" onclick="onStop()">STOP</button>
+</div>
+
+<!-- 4. Result -->
+<div id="screen-result" class="screen">
+  <div class="spacer"></div>
+  <div class="result-elapsed" id="result-elapsed">--</div>
+  <div class="result-unit">秒</div>
+  <div class="result-diff" id="result-diff">--</div>
+  <div class="result-target" id="result-target">目標: 60.0 秒</div>
+  <div style="height: 32px;"></div>
+  <button class="btn btn-outline" onclick="resetParticipant()">もう一度</button>
+  <div class="spacer"></div>
+</div>
+
+<!-- ========== ADMIN SCREENS ========== -->
+
+<div class="admin-header" id="admin-header" style="display:none;">管理画面</div>
+
+<div id="screen-admin" class="screen">
+  <!-- Session URL -->
+  <div class="admin-section">
+    <h2>参加者用URL</h2>
+    <div class="session-url-box">
+      <span class="url-text" id="admin-url-text">---</span>
+      <button class="btn-copy" onclick="copyUrl()">コピー</button>
+    </div>
+  </div>
+
+  <!-- Work type + Start -->
+  <div class="admin-section">
+    <h2>ワーク設定</h2>
+    <div class="admin-work-select">
+      <button class="admin-work-btn selected" data-work="60sec" onclick="selectAdminWork(this)">60秒</button>
+      <button class="admin-work-btn" data-work="120count" onclick="selectAdminWork(this)">120カウント</button>
+    </div>
+    <button class="btn btn-accent" id="btn-start-all" onclick="onStartAll()">全員スタート</button>
+  </div>
+
+  <!-- Waiting participants -->
+  <div class="admin-section">
+    <h2>待機中 <span class="admin-badge" id="admin-wait-count">0</span></h2>
+    <ul class="waiting-list" id="admin-waiting-list">
+      <li class="empty-state">まだ参加者がいません</li>
+    </ul>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="admin-section" id="admin-dashboard">
+    <h2>結果ダッシュボード</h2>
+    <div class="dash-stats">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-avg">--</div>
+        <div class="stat-label">平均 (秒)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-min">--</div>
+        <div class="stat-label">最小差</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-max">--</div>
+        <div class="stat-label">最大差</div>
+      </div>
+    </div>
+    <ul class="result-list" id="admin-result-list">
+      <li class="empty-state">結果がここに表示されます</li>
+    </ul>
+    <div class="btn-reset-wrap">
+      <button class="btn btn-outline" onclick="onResetSession()" style="font-size:13px;padding:10px 24px;">セッションリセット</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===================== CONFIG =====================
+  const GAS_URL = 'https://script.google.com/macros/s/PLACEHOLDER/exec';
+  const POLL_INTERVAL = 3000; // ms
+
+  // ===================== STATE =====================
+  let isAdmin = false;
+  let sessionId = '';
+  let participantName = '';
+  let selectedWork = '60sec';
+  let measureStartTime = 0;
+  let pollTimer = null;
+  let adminPollTimer = null;
+  let previousResultCount = 0;
+
+  // Work type -> target ms
+  function targetMs(work) {
+    return work === '60sec' ? 60000 : 120000;
+  }
+  function workLabel(work) {
+    return work === '60sec' ? '60秒ワーク' : '120カウントワーク';
+  }
+
+  // ===================== INIT =====================
+  function init() {
+    const params = new URLSearchParams(window.location.search);
+    isAdmin = params.get('admin') === 'true';
+    sessionId = params.get('session') || '';
+
+    if (!sessionId) {
+      sessionId = generateSessionId();
+      // Update URL without reload
+      const url = new URL(window.location);
+      url.searchParams.set('session', sessionId);
+      if (isAdmin) url.searchParams.set('admin', 'true');
+      window.history.replaceState({}, '', url);
+    }
+
+    if (isAdmin) {
+      showAdminMode();
+    } else {
+      showParticipantMode();
+    }
+  }
+
+  function generateSessionId() {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let id = '';
+    for (let i = 0; i < 6; i++) id += chars[Math.floor(Math.random() * chars.length)];
+    return id;
+  }
+
+  // ===================== SCREEN MANAGEMENT =====================
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+
+  // ===================== PARTICIPANT =====================
+  function showParticipantMode() {
+    document.getElementById('admin-header').style.display = 'none';
+    document.getElementById('session-id-text').textContent = sessionId;
+    showScreen('screen-entry');
+  }
+
+  window.selectWork = function(el) {
+    document.querySelectorAll('.work-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedWork = el.dataset.work;
+  };
+
+  window.onReady = function() {
+    const nameInput = document.getElementById('input-name');
+    participantName = nameInput.value.trim();
+    if (!participantName) {
+      nameInput.style.borderColor = 'var(--accent)';
+      nameInput.focus();
+      return;
+    }
+
+    // Register participant with GAS
+    postToGAS({
+      action: 'register',
+      sessionId: sessionId,
+      name: participantName,
+      workType: selectedWork
+    });
+
+    // Show waiting screen
+    document.getElementById('wait-work-label').textContent = workLabel(selectedWork);
+    showScreen('screen-wait');
+
+    // Start polling for start signal
+    startStatusPolling();
+  };
+
+  function startStatusPolling() {
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(function() {
+      fetchFromGAS({ action: 'status', sessionId: sessionId })
+        .then(function(data) {
+          if (data && data.started) {
+            clearInterval(pollTimer);
+            pollTimer = null;
+            // Use server start time for consistency
+            measureStartTime = data.startTime || Date.now();
+            // Small delay so the white screen transition feels intentional
+            setTimeout(function() {
+              showScreen('screen-measure');
+            }, 100);
+          }
+        })
+        .catch(function() { /* silent */ });
+    }, POLL_INTERVAL);
+  }
+
+  window.onStop = function() {
+    const now = Date.now();
+    const elapsedMs = now - measureStartTime;
+    const target = targetMs(selectedWork);
+    const elapsedSec = elapsedMs / 1000;
+    const diffSec = (elapsedMs - target) / 1000;
+
+    // Display result
+    document.getElementById('result-elapsed').textContent = elapsedSec.toFixed(1);
+
+    const diffEl = document.getElementById('result-diff');
+    const absDiff = Math.abs(diffSec);
+    const sign = diffSec >= 0 ? '+' : '-';
+    diffEl.textContent = sign + absDiff.toFixed(1) + ' 秒';
+    diffEl.className = 'result-diff ' + (absDiff <= 3 ? 'good' : 'bad');
+
+    document.getElementById('result-target').textContent =
+      '目標: ' + (target / 1000).toFixed(1) + ' 秒';
+
+    showScreen('screen-result');
+
+    // Send result to GAS
+    postToGAS({
+      action: 'result',
+      sessionId: sessionId,
+      name: participantName,
+      workType: selectedWork,
+      elapsedMs: elapsedMs,
+      targetMs: target
+    });
+  };
+
+  window.resetParticipant = function() {
+    measureStartTime = 0;
+    showScreen('screen-entry');
+  };
+
+  // ===================== ADMIN =====================
+  function showAdminMode() {
+    // Hide participant screens
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('admin-header').style.display = 'block';
+    showScreen('screen-admin');
+
+    // Set participant URL
+    const pUrl = window.location.origin + window.location.pathname + '?session=' + sessionId;
+    document.getElementById('admin-url-text').textContent = pUrl;
+
+    // Start polling for waiting list and results
+    startAdminPolling();
+  }
+
+  window.selectAdminWork = function(el) {
+    document.querySelectorAll('.admin-work-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedWork = el.dataset.work;
+  };
+
+  window.copyUrl = function() {
+    const pUrl = window.location.origin + window.location.pathname + '?session=' + sessionId;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(pUrl);
+    }
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = 'OK!';
+    setTimeout(function() { btn.textContent = 'コピー'; }, 1500);
+  };
+
+  window.onStartAll = function() {
+    const btn = document.getElementById('btn-start-all');
+    btn.disabled = true;
+    btn.textContent = 'スタート中...';
+
+    postToGAS({
+      action: 'start',
+      sessionId: sessionId,
+      workType: selectedWork
+    }).then(function() {
+      btn.textContent = '計測中';
+    }).catch(function() {
+      btn.disabled = false;
+      btn.textContent = '全員スタート';
+    });
+  };
+
+  window.onResetSession = function() {
+    postToGAS({
+      action: 'reset',
+      sessionId: sessionId
+    }).then(function() {
+      // Reset UI
+      document.getElementById('btn-start-all').disabled = false;
+      document.getElementById('btn-start-all').textContent = '全員スタート';
+      document.getElementById('admin-wait-count').textContent = '0';
+      document.getElementById('admin-waiting-list').innerHTML =
+        '<li class="empty-state">まだ参加者がいません</li>';
+      document.getElementById('admin-result-list').innerHTML =
+        '<li class="empty-state">結果がここに表示されます</li>';
+      document.getElementById('stat-avg').textContent = '--';
+      document.getElementById('stat-min').textContent = '--';
+      document.getElementById('stat-max').textContent = '--';
+      previousResultCount = 0;
+    });
+  };
+
+  function startAdminPolling() {
+    if (adminPollTimer) clearInterval(adminPollTimer);
+    adminPollTimer = setInterval(function() {
+      // Fetch waiting list
+      fetchFromGAS({ action: 'waiting', sessionId: sessionId })
+        .then(function(data) {
+          if (data && data.participants) {
+            updateWaitingList(data.participants);
+          }
+        })
+        .catch(function() {});
+
+      // Fetch results
+      fetchFromGAS({ action: 'results', sessionId: sessionId })
+        .then(function(data) {
+          if (data && data.results) {
+            updateDashboard(data.results);
+          }
+        })
+        .catch(function() {});
+    }, POLL_INTERVAL);
+  }
+
+  function updateWaitingList(participants) {
+    const el = document.getElementById('admin-waiting-list');
+    const countEl = document.getElementById('admin-wait-count');
+    countEl.textContent = participants.length;
+
+    if (participants.length === 0) {
+      el.innerHTML = '<li class="empty-state">まだ参加者がいません</li>';
+      return;
+    }
+
+    let html = '';
+    participants.forEach(function(p) {
+      html += '<li>' + escapeHtml(p.name) + ' <span style="color:var(--gray-mid);font-size:12px;">(' + workLabel(p.workType) + ')</span></li>';
+    });
+    el.innerHTML = html;
+  }
+
+  function updateDashboard(results) {
+    if (results.length === 0) return;
+
+    // Sort by absolute diff ascending (most accurate first)
+    var sorted = results.slice().sort(function(a, b) {
+      return Math.abs(a.diff) - Math.abs(b.diff);
+    });
+
+    // Stats
+    var diffs = sorted.map(function(r) { return Math.abs(r.diff); });
+    var elapsed = sorted.map(function(r) { return r.elapsed; });
+    var avg = elapsed.reduce(function(s, v) { return s + v; }, 0) / elapsed.length;
+    var minDiff = Math.min.apply(null, diffs);
+    var maxDiff = Math.max.apply(null, diffs);
+
+    document.getElementById('stat-avg').textContent = avg.toFixed(1);
+    document.getElementById('stat-min').textContent = minDiff.toFixed(1);
+    document.getElementById('stat-max').textContent = maxDiff.toFixed(1);
+
+    // Result list
+    var listEl = document.getElementById('admin-result-list');
+    var html = '';
+    sorted.forEach(function(r, i) {
+      var sign = r.diff >= 0 ? '+' : '-';
+      var absDiff = Math.abs(r.diff);
+      var diffClass = absDiff <= 3 ? 'good' : 'bad';
+      var rankClass = i === 0 ? 'top' : '';
+
+      html += '<li>' +
+        '<span class="rl-rank ' + rankClass + '">' + (i + 1) + '</span>' +
+        '<span class="rl-name">' + escapeHtml(r.name) + '</span>' +
+        '<span class="rl-time">' + r.elapsed.toFixed(1) + 's</span>' +
+        '<span class="rl-diff ' + diffClass + '">' + sign + absDiff.toFixed(1) + 's</span>' +
+        '</li>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  // ===================== GAS API =====================
+  function postToGAS(data) {
+    return fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(data)
+    }).then(function() {
+      // no-cors means opaque response, return empty
+      return {};
+    }).catch(function(err) {
+      console.error('POST error:', err);
+      throw err;
+    });
+  }
+
+  function fetchFromGAS(params) {
+    var url = new URL(GAS_URL);
+    Object.keys(params).forEach(function(k) {
+      url.searchParams.append(k, params[k]);
+    });
+    return fetch(url.toString(), {
+      method: 'GET',
+      mode: 'cors'
+    })
+    .then(function(res) { return res.json(); })
+    .catch(function(err) {
+      console.error('GET error:', err);
+      throw err;
+    });
+  }
+
+  // ===================== UTIL =====================
+  function escapeHtml(str) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(str));
+    return d.innerHTML;
+  }
+
+  // ===================== BOOT =====================
+  init();
+
+})();
+</script>
+</body>
+</html>
