@@ -430,6 +430,10 @@
     Session: <strong id="session-id-text">---</strong>
   </div>
 
+  <div style="background:rgba(78,205,196,0.1);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;line-height:1.6;color:#333;">
+    <strong>Step 1:</strong> 名前を入力し、ワークを選んで「準備OK」を押してください。その後、講師のスタートを待ちます。
+  </div>
+
   <label for="input-name">名前</label>
   <input type="text" id="input-name" placeholder="例: 山田太郎" autocomplete="off">
 
@@ -454,23 +458,33 @@
 <!-- 2. Waiting -->
 <div id="screen-wait" class="screen">
   <div class="pulse-ring"></div>
-  <div class="wait-msg">管理者のスタートを待っています...</div>
+  <div class="wait-msg">講師のスタートを待っています...</div>
   <div class="wait-sub" id="wait-work-label">60秒ワーク</div>
+  <div style="margin-top:24px;font-size:13px;color:#888;max-width:280px;text-align:center;line-height:1.6;">
+    <strong>Step 2:</strong> スタートすると画面が白くなります。自分の中で時間が経ったと思ったら「STOP」を押してください。
+  </div>
 </div>
 
 <!-- 3. Measuring -->
 <div id="screen-measure" class="screen">
+  <div style="position:absolute;top:24px;left:0;right:0;text-align:center;font-size:14px;color:#bbb;">
+    時間が経ったと思ったらSTOPを押してください
+  </div>
   <button class="btn btn-accent" id="btn-stop" onclick="onStop()">STOP</button>
 </div>
 
 <!-- 4. Result -->
 <div id="screen-result" class="screen">
   <div class="spacer"></div>
+  <div style="font-size:13px;color:#888;margin-bottom:16px;">あなたの結果</div>
   <div class="result-elapsed" id="result-elapsed">--</div>
   <div class="result-unit">秒</div>
   <div class="result-diff" id="result-diff">--</div>
   <div class="result-target" id="result-target">目標: 60.0 秒</div>
-  <div style="height: 32px;"></div>
+  <div style="margin-top:20px;font-size:13px;color:#888;max-width:280px;text-align:center;line-height:1.6;">
+    結果は講師のダッシュボードにも表示されています。全員の結果が出揃うまでお待ちください。
+  </div>
+  <div style="height: 20px;"></div>
   <button class="btn btn-outline" onclick="resetParticipant()">もう一度</button>
   <div class="spacer"></div>
 </div>
@@ -643,9 +657,12 @@
   };
 
   function startStatusListener() {
-    db.ref('sessions/' + sessionId + '/started').on('value', function(snap) {
-      if (snap.val() === true) {
-        db.ref('sessions/' + sessionId + '/started').off();
+    // まず現在のstartTimeを取得し、それ以降の変更のみに反応する
+    var listenStarted = Date.now();
+    db.ref('sessions/' + sessionId).on('value', function(snap) {
+      var data = snap.val();
+      if (data && data.started === true && data.startTime && data.startTime > listenStarted) {
+        db.ref('sessions/' + sessionId).off();
         measureStartTime = Date.now();
         showScreen('screen-measure');
       }
