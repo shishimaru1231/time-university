@@ -533,13 +533,23 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
 (function() {
   'use strict';
 
-  // ===================== CONFIG =====================
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbz4FrPeR0g47HP1LISqdh85dMOY64Yptmq_GWUa5fudw2jDUZiwhbrCux0QsSqVe0q64Q/exec';
-  const POLL_INTERVAL = 3000; // ms
+  // ===================== FIREBASE CONFIG =====================
+  firebase.initializeApp({
+    apiKey: "AIzaSyDNXSvsxrv4tBY1rl0289mOBGODR9-QRp4",
+    authDomain: "time-university.firebaseapp.com",
+    databaseURL: "https://time-university-default-rtdb.firebaseio.com",
+    projectId: "time-university",
+    storageBucket: "time-university.firebasestorage.app",
+    messagingSenderId: "630638925517",
+    appId: "1:630638925517:web:24dd0dfbcc23fd702e3b84"
+  });
+  const db = firebase.database();
 
   // ===================== STATE =====================
   let isAdmin = false;
@@ -617,40 +627,29 @@
       return;
     }
 
-    // Register participant with GAS
-    postToGAS({
-      action: 'register',
-      sessionId: sessionId,
+    // Register participant with Firebase
+    db.ref('sessions/' + sessionId + '/waiting/' + participantName).set({
       name: participantName,
-      workType: selectedWork
+      workType: selectedWork,
+      registeredAt: Date.now()
     });
 
     // Show waiting screen
     document.getElementById('wait-work-label').textContent = workLabel(selectedWork);
     showScreen('screen-wait');
 
-    // Start polling for start signal
-    startStatusPolling();
+    // Listen for start signal (realtime)
+    startStatusListener();
   };
 
-  function startStatusPolling() {
-    if (pollTimer) clearInterval(pollTimer);
-    pollTimer = setInterval(function() {
-      fetchFromGAS({ action: 'status', sessionId: sessionId })
-        .then(function(data) {
-          if (data && data.started) {
-            clearInterval(pollTimer);
-            pollTimer = null;
-            // Use server start time for consistency
-            measureStartTime = data.startTime || Date.now();
-            // Small delay so the white screen transition feels intentional
-            setTimeout(function() {
-              showScreen('screen-measure');
-            }, 100);
-          }
-        })
-        .catch(function() { /* silent */ });
-    }, POLL_INTERVAL);
+  function startStatusListener() {
+    db.ref('sessions/' + sessionId + '/started').on('value', function(snap) {
+      if (snap.val() === true) {
+        db.ref('sessions/' + sessionId + '/started').off();
+        measureStartTime = Date.now();
+        showScreen('screen-measure');
+      }
+    });
   }
 
   window.onStop = function() {
@@ -674,14 +673,14 @@
 
     showScreen('screen-result');
 
-    // Send result to GAS
-    postToGAS({
-      action: 'result',
-      sessionId: sessionId,
+    // Send result to Firebase
+    db.ref('sessions/' + sessionId + '/results').push({
       name: participantName,
       workType: selectedWork,
       elapsedMs: elapsedMs,
-      targetMs: target
+      targetMs: target,
+      diffSec: Math.round(diffSec * 10) / 10,
+      submittedAt: Date.now()
     });
   };
 
@@ -726,10 +725,10 @@
     btn.disabled = true;
     btn.textContent = 'スタート中...';
 
-    postToGAS({
-      action: 'start',
-      sessionId: sessionId,
-      workType: selectedWork
+    db.ref('sessions/' + sessionId).update({
+      started: true,
+      workType: selectedWork,
+      startTime: Date.now()
     }).then(function() {
       btn.textContent = '計測中';
     }).catch(function() {
@@ -739,46 +738,58 @@
   };
 
   window.onResetSession = function() {
-    postToGAS({
-      action: 'reset',
-      sessionId: sessionId
-    }).then(function() {
-      // Reset UI
-      document.getElementById('btn-start-all').disabled = false;
-      document.getElementById('btn-start-all').textContent = '全員スタート';
-      document.getElementById('admin-wait-count').textContent = '0';
-      document.getElementById('admin-waiting-list').innerHTML =
-        '<li class="empty-state">まだ参加者がいません</li>';
-      document.getElementById('admin-result-list').innerHTML =
-        '<li class="empty-state">結果がここに表示されます</li>';
-      document.getElementById('stat-avg').textContent = '--';
-      document.getElementById('stat-min').textContent = '--';
-      document.getElementById('stat-max').textContent = '--';
-      previousResultCount = 0;
+    db.ref('sessions/' + sessionId).update({
+      started: false,
+      startTime: null
     });
+    db.ref('sessions/' + sessionId + '/waiting').remove();
+    db.ref('sessions/' + sessionId + '/results').remove();
+
+    // Reset UI
+    document.getElementById('btn-start-all').disabled = false;
+    document.getElementById('btn-start-all').textContent = '全員スタート';
+    document.getElementById('admin-wait-count').textContent = '0';
+    document.getElementById('admin-waiting-list').innerHTML =
+      '<li class="empty-state">まだ参加者がいません</li>';
+    document.getElementById('admin-result-list').innerHTML =
+      '<li class="empty-state">結果がここに表示されます</li>';
+    document.getElementById('stat-avg').textContent = '--';
+    document.getElementById('stat-min').textContent = '--';
+    document.getElementById('stat-max').textContent = '--';
+    previousResultCount = 0;
   };
 
   function startAdminPolling() {
-    if (adminPollTimer) clearInterval(adminPollTimer);
-    adminPollTimer = setInterval(function() {
-      // Fetch waiting list
-      fetchFromGAS({ action: 'waiting', sessionId: sessionId })
-        .then(function(data) {
-          if (data && data.participants) {
-            updateWaitingList(data.participants);
-          }
-        })
-        .catch(function() {});
+    // Realtime listener for waiting list
+    db.ref('sessions/' + sessionId + '/waiting').on('value', function(snap) {
+      var data = snap.val();
+      var participants = [];
+      if (data) {
+        Object.keys(data).forEach(function(k) {
+          participants.push(data[k]);
+        });
+      }
+      updateWaitingList(participants);
+    });
 
-      // Fetch results
-      fetchFromGAS({ action: 'results', sessionId: sessionId })
-        .then(function(data) {
-          if (data && data.results) {
-            updateDashboard(data.results);
-          }
-        })
-        .catch(function() {});
-    }, POLL_INTERVAL);
+    // Realtime listener for results
+    db.ref('sessions/' + sessionId + '/results').on('value', function(snap) {
+      var data = snap.val();
+      var results = [];
+      if (data) {
+        Object.keys(data).forEach(function(k) {
+          var r = data[k];
+          results.push({
+            name: r.name,
+            workType: r.workType,
+            elapsed: Math.round(r.elapsedMs / 100) / 10,
+            target: r.targetMs / 1000,
+            diff: r.diffSec
+          });
+        });
+      }
+      updateDashboard(results);
+    });
   }
 
   function updateWaitingList(participants) {
@@ -836,39 +847,8 @@
     listEl.innerHTML = html;
   }
 
-  // ===================== GAS API =====================
-  // GASのWeb AppはCORS制約があるため、全てGETパラメータで送信し、
-  // リダイレクト後のJSONレスポンスを受け取る方式にする
-  function postToGAS(data) {
-    var url = new URL(GAS_URL);
-    url.searchParams.append('payload', JSON.stringify(data));
-    url.searchParams.append('method', 'POST');
-    return fetch(url.toString(), {
-      method: 'GET',
-      redirect: 'follow'
-    })
-    .then(function(res) { return res.json(); })
-    .catch(function(err) {
-      console.error('POST error:', err);
-      return {};
-    });
-  }
-
-  function fetchFromGAS(params) {
-    var url = new URL(GAS_URL);
-    Object.keys(params).forEach(function(k) {
-      url.searchParams.append(k, params[k]);
-    });
-    return fetch(url.toString(), {
-      method: 'GET',
-      redirect: 'follow'
-    })
-    .then(function(res) { return res.json(); })
-    .catch(function(err) {
-      console.error('GET error:', err);
-      throw err;
-    });
-  }
+  // ===================== Firebase API (replaced GAS) =====================
+  // All communication is via Firebase Realtime Database listeners (no polling needed)
 
   // ===================== UTIL =====================
   function escapeHtml(str) {
