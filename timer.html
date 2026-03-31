@@ -484,10 +484,13 @@
   <div style="margin-top:20px;font-size:13px;color:#888;max-width:280px;text-align:center;line-height:1.6;">
     結果は講師のダッシュボードにも表示されています。全員の結果が出揃うまでお待ちください。
   </div>
-  <div style="height: 20px;"></div>
+  <div style="height: 16px;"></div>
   <button class="btn btn-outline" onclick="resetParticipant()">もう一度</button>
   <div class="spacer"></div>
 </div>
+
+<!-- Note: アセスメントへの導線はワークショップ進行に合わせて講師がチャットでURLを共有する。
+     将来的にはここにアセスメントフォームへのリンクボタンを追加する。 -->
 
 <!-- ========== ADMIN SCREENS ========== -->
 
@@ -527,7 +530,7 @@
     <div class="dash-stats">
       <div class="stat-card">
         <div class="stat-val" id="stat-avg">--</div>
-        <div class="stat-label">平均 (秒)</div>
+        <div class="stat-label">平均ずれ (秒)</div>
       </div>
       <div class="stat-card">
         <div class="stat-val" id="stat-min">--</div>
@@ -571,9 +574,6 @@
   let participantName = '';
   let selectedWork = '60sec';
   let measureStartTime = 0;
-  let pollTimer = null;
-  let adminPollTimer = null;
-  let previousResultCount = 0;
 
   // Work type -> target ms
   function targetMs(work) {
@@ -670,6 +670,10 @@
   }
 
   window.onStop = function() {
+    var stopBtn = document.getElementById('btn-stop');
+    if (stopBtn.disabled) return;
+    stopBtn.disabled = true;
+
     const now = Date.now();
     const elapsedMs = now - measureStartTime;
     const target = targetMs(selectedWork);
@@ -686,7 +690,9 @@
     diffEl.className = 'result-diff ' + (absDiff <= 3 ? 'good' : 'bad');
 
     document.getElementById('result-target').textContent =
-      '目標: ' + (target / 1000).toFixed(1) + ' 秒';
+      selectedWork === '120count'
+        ? '目標: 120を数える（約120秒）'
+        : '目標: ' + (target / 1000).toFixed(1) + ' 秒';
 
     showScreen('screen-result');
 
@@ -703,6 +709,7 @@
 
   window.resetParticipant = function() {
     measureStartTime = 0;
+    document.getElementById('btn-stop').disabled = false;
     showScreen('screen-entry');
   };
 
@@ -729,9 +736,20 @@
 
   window.copyUrl = function() {
     const pUrl = window.location.origin + window.location.pathname + '?session=' + sessionId;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(pUrl);
-    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pUrl);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = pUrl;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    } catch (e) { /* silent */ }
     const btn = document.querySelector('.btn-copy');
     btn.textContent = 'OK!';
     setTimeout(function() { btn.textContent = 'コピー'; }, 1500);
@@ -773,7 +791,6 @@
     document.getElementById('stat-avg').textContent = '--';
     document.getElementById('stat-min').textContent = '--';
     document.getElementById('stat-max').textContent = '--';
-    previousResultCount = 0;
   };
 
   function startAdminPolling() {
@@ -836,8 +853,7 @@
 
     // Stats
     var diffs = sorted.map(function(r) { return Math.abs(r.diff); });
-    var elapsed = sorted.map(function(r) { return r.elapsed; });
-    var avg = elapsed.reduce(function(s, v) { return s + v; }, 0) / elapsed.length;
+    var avg = diffs.reduce(function(s, v) { return s + v; }, 0) / diffs.length;
     var minDiff = Math.min.apply(null, diffs);
     var maxDiff = Math.max.apply(null, diffs);
 
