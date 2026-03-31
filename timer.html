@@ -575,6 +575,7 @@
   let selectedWork = '60sec';
   let measureStartTime = 0;
   const participantId = generateParticipantId();
+  let statusCallback = null; // リスナー管理用
 
   function generateParticipantId() {
     var chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -660,31 +661,40 @@
       name: participantName,
       workType: selectedWork,
       registeredAt: Date.now()
+    }).then(function() {
+      // Show waiting screen
+      document.getElementById('wait-work-label').textContent = workLabel(selectedWork);
+      showScreen('screen-wait');
+      // Listen for start signal (realtime)
+      startStatusListener();
+    }).catch(function(err) {
+      alert('接続エラーが発生しました。ページを再読み込みしてください。');
+      showScreen('screen-entry');
     });
-
-    // Show waiting screen
-    document.getElementById('wait-work-label').textContent = workLabel(selectedWork);
-    showScreen('screen-wait');
-
-    // Listen for start signal (realtime)
-    startStatusListener();
   };
 
   function startStatusListener() {
-    // まず現在のstartTimeを取得し、それ以降の変更のみに反応する
+    cleanupStatusListener();
     var listenStarted = Date.now();
-    db.ref('sessions/' + sessionId).on('value', function(snap) {
+    statusCallback = function(snap) {
       var data = snap.val();
       if (data && data.started === true && data.startTime && data.startTime > listenStarted) {
-        db.ref('sessions/' + sessionId).off();
-        // 管理者が選択したworkTypeで上書き
+        cleanupStatusListener();
         if (data.workType) {
           selectedWork = data.workType;
         }
         measureStartTime = Date.now();
         showScreen('screen-measure');
       }
-    });
+    };
+    db.ref('sessions/' + sessionId).on('value', statusCallback);
+  }
+
+  function cleanupStatusListener() {
+    if (statusCallback) {
+      db.ref('sessions/' + sessionId).off('value', statusCallback);
+      statusCallback = null;
+    }
   }
 
   window.onStop = function() {
@@ -722,10 +732,14 @@
       targetMs: target,
       diffSec: Math.round(diffSec * 10) / 10,
       submittedAt: Date.now()
+    }).catch(function() {
+      // 結果画面は表示済みなので、送信失敗をさりげなく通知
+      document.getElementById('result-target').textContent += '（送信失敗 - 講師に報告してください）';
     });
   };
 
   window.resetParticipant = function() {
+    cleanupStatusListener();
     measureStartTime = 0;
     document.getElementById('btn-stop').disabled = false;
     showScreen('screen-entry');
@@ -812,6 +826,10 @@
   };
 
   function startAdminPolling() {
+    // 既存リスナーを解除してから登録（二重登録防止）
+    db.ref('sessions/' + sessionId + '/waiting').off('value');
+    db.ref('sessions/' + sessionId + '/results').off('value');
+
     // Realtime listener for waiting list
     db.ref('sessions/' + sessionId + '/waiting').on('value', function(snap) {
       var data = snap.val();

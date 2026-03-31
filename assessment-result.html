@@ -12,6 +12,7 @@
 
   html, body {
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     font-family: 'Inter', 'Noto Sans JP', sans-serif;
     background: #F5F5F5;
@@ -22,6 +23,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    height: 100dvh;
     max-width: 1100px;
     margin: 0 auto;
     padding: 16px 24px 8px;
@@ -260,7 +262,8 @@
 
   /* --- Responsive --- */
   @media (max-width: 768px) {
-    .page { padding: 10px 12px 6px; }
+    html, body { overflow: auto; }
+    .page { padding: 10px 12px 6px; height: auto; min-height: 100vh; min-height: 100dvh; }
     .top-row { flex-direction: column; gap: 10px; }
     .type-name { font-size: 26px; }
     .explanation-card { flex-direction: column; gap: 10px; }
@@ -454,11 +457,13 @@
 
   // --- Draw Radar Chart ---
   const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
   const container = canvas.parentElement;
 
   function drawRadar() {
     const rect = container.getBoundingClientRect();
-    const size = Math.min(rect.width, rect.height) - 16;
+    const rawSize = Math.min(rect.width, rect.height) - 16;
+    const size = Math.max(rawSize, 120); // 最低120pxを保証
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = size * dpr;
@@ -576,7 +581,11 @@
   }
 
   drawRadar();
-  window.addEventListener('resize', drawRadar);
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawRadar, 200);
+  });
 
 })();
 </script>
